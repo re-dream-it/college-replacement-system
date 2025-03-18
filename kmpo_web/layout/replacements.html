@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Просмотр замен - КМПО РАНХиГС</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Хедер -->
+    <header>
+        <div class="header-content">
+            <img src="images/logo_bw.png" alt="Логотип колледжа" class="logo">
+            <nav>
+                <ul>
+                    <li><a href="replacements.html">Просмотр замен</a></li>
+                    <li><a href="addreplacements.html">Внесение замен</a></li>
+                    <li><a href="#">FAQ</a></li>
+                </ul>
+            </nav>
+            <button class="logout-btn">Выход</button>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main>
+        <h1>Просмотр замен</h1>
+
+        <!-- Фильтры -->
+        <div class="filters">
+            <div class="dropdown-checkbox">
+                <button type="button" class="dropdown-toggle">Тип замены</button>
+                <div class="dropdown-content">
+                    <label><input type="checkbox" name="typeFilter" value="teacher"> Замена преподавателя</label>
+                    <label><input type="checkbox" name="typeFilter" value="discipline"> Замена дисциплины</label>
+                    <label><input type="checkbox" name="typeFilter" value="cancel"> Отмена занятия</label>
+                    <label><input type="checkbox" name="typeFilter" value="remote"> Замена на дистанционный формат</label>
+                </div>
+            </div>
+            <input type="text" id="dateFilter" placeholder="Дата (например: 12.03.2023)">
+            <input type="text" id="groupFilter" placeholder="Группа (например: 201-СА-23)">
+        </div>
+
+        <div class="filters">
+            <input type="text" id="teacherFilter" placeholder="Преподаватель">
+            <input type="text" id="disciplineFilter" placeholder="Код дисциплины / Дисциплина">
+            <input type="text" id="pairFilter" placeholder="Номер пары">
+        </div>
+
+        <!-- Таблица замен -->
+        <table>
+            <thead>
+                <tr>
+                    <th colspan="3" class="left">Общ. сведения</th>
+                    <th colspan="4" class="was-header">Было</th>
+                    <th colspan="4" class="became-header right">Стало</th>
+                    <th class="hidden_tab"></th>
+                </tr>
+                <tr>
+                    <th>Дата</th>
+                    <th>Группа</th>
+                    <th>Тип замены</th>
+                    <th class="was">Преподаватель</th>
+                    <th class="was">Дисциплина</th>
+                    <th class="was">Номер пары</th>
+                    <th class="was">Кабинет</th>
+                    <th class="became">Преподаватель</th>
+                    <th class="became">Дисциплина</th>
+                    <th class="became">Номер пары</th>
+                    <th class="became">Кабинет</th>
+                    <th class="hidden_tab"></th>
+                </tr>
+            </thead>
+            <tbody>      
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                <tr>
+                    <td>12.03.2025</td>
+                    <td>101-СА-23</td>
+                    <td>Замена дисциплины</td>
+                    <!-- БЫЛО -->
+                    <td class="was">Малькова Т.А.</td>
+                    <td class="was">СО.02.01 Математика</td>
+                    <td class="was">2</td>
+                    <td class="was">412</td>
+                    <!-- СТАЛО -->
+                    <td class="became">Пяткина М.А.</td>
+                    <td class="became">СО.01.04 История России (общ)</td>
+                    <td class="became">2</td>
+                    <td class="became">412</td>
+                    <!-- Действия -->
+                    <td class="edit"><a class="edit-btn" href="editreplacement.html"><i class="fas fa-pencil-alt"></i></a></td>
+                </tr>                
+                
+            </tbody>
+        </table>
+    </main>
+
+    <!-- Футер -->
+    <footer>
+        <div class="footer-content">
+            <img src="images/logo_bw.png" alt="Логотип колледжа" class="logo">
+            <div class="info-block">
+                <p>109316, г. Москва, Волгоградский проспект, д.43, стр.1А</p>
+                <p>+7 (499) 270-08-88 | +7 (499) 956-00-10</p>
+                <p>Соцсети: <a href="#">VK</a>, <a href="#">RuTube</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
