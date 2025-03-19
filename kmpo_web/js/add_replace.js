@@ -64,10 +64,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const date = document.getElementById('date').value.trim();
         today = new Date().toISOString().split('T')[0];
-        if (date < today) {
-            alert('Дата не может быть раньше текущей.');
-            isValid = false;
-        }
+        // if (date < today) {
+        //     alert('Дата не может быть раньше текущей.');
+        //     isValid = false;
+        // }
 
         for (const field of fieldsToCheck) {
             const input = document.getElementById(field.id);
@@ -86,19 +86,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Проверка занятости кабинета.
+
         const newPair = document.getElementById('newPair').value
         const group = document.getElementById('group').value
 
+        if (!isValid) {return;}
         const newRoom = document.getElementById('newRoom').value
-        const response = await fetch(`functions/check_replace.php?type=room&value=${newRoom}&date=${date}&newPair=${newPair}`);
-        const exists = await response.json();
+        let response = await fetch(`functions/check_replace.php?type=room&value=${newRoom}&date=${date}&newPair=${newPair}`);
+        let exists = await response.json();
         console.log(exists)
         if (exists) {
-            const isConfirmed = confirm(`Кабинет ${newRoom} уже занят следующей парой:\n\nДата и время: ${date}, ${exists['slot_id']} пара\nГруппа: ${exists['name']}\nДисциплина: ${exists['discipline_name']}\nПреподаватель: ${exists['teacher_fullname']}\n\nВы уверены, что хотите продолжить и поставить эту замену для группы ${group}?`);
-            isValid = isConfirmed;
+            const isConfirmedRoom = confirm(`Кабинет ${newRoom} уже занят следующей парой:\n\nДата и время: ${date}, ${exists['slot_id']} пара\nГруппа: ${exists['name']}\nДисциплина: ${exists['discipline_name']}\nПреподаватель: ${exists['teacher_fullname']}\n\nВы уверены, что хотите продолжить и поставить эту замену для группы ${group}?`);
+            isValid = isConfirmedRoom;
         }
 
- 
+        if (!isValid) {return;}
+        const newTeacher = document.getElementById('newTeacher').value
+        response = await fetch(`functions/check_replace.php?type=teacher&value=${newTeacher}&date=${date}&newPair=${newPair}`);
+        exists = await response.json();
+        console.log(exists)
+        if (exists) {
+            const isConfirmedTeacher = confirm(`Преподаватель ${exists['teacher_fullname']} уже занят следующей парой:\n\nДата и время: ${date}, ${exists['slot_id']} пара\nГруппа: ${exists['name']}\nДисциплина: ${exists['discipline_name']}\nКабинет: ${newRoom}\n\nВы уверены, что хотите продолжить и поставить эту замену для группы ${group}?`);
+            isValid = isConfirmedTeacher;
+        }
   
         if (isValid) {
             alert('Форма отправлена!')

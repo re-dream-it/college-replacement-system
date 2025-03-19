@@ -157,13 +157,13 @@ class WebDatabase extends DataBase
         return $data;
     }
 
-    // Проверка занятости кабинета (пары)
+    // Проверка занятости кабинета парой
     public function checkRoom($date, $room, $slot_id){
         $statement = $this->pdo->prepare("SELECT rc.id, rc.slot_id, g.name,
             COALESCE(CONCAT(LEFT(t.name, 1), '. ', LEFT(t.surname, 1), '. ', t.lastname), '') as teacher_fullname,
             COALESCE(CONCAT(d.code, ' ', d.name), '') as discipline_name
             FROM replacements r
-            JOIN replacement_components rc ON r.became_id = rc.id OR r.was_id = rc.id
+            JOIN replacement_components rc ON r.became_id = rc.id
             JOIN slots s ON rc.slot_id = s.id
             JOIN teachers t ON rc.teacher_id = t.id
             JOIN disciplines d ON rc.discipline_id = d.id
@@ -176,4 +176,24 @@ class WebDatabase extends DataBase
         return $data;
     }
 
+    // Проверка занятости преподавателя парой
+    public function checkTeacher($date, $fullname, $slot_id){
+        $statement = $this->pdo->prepare("SELECT rc.id, rc.slot_id, g.name,
+            COALESCE(CONCAT(LEFT(t.name, 1), '. ', LEFT(t.surname, 1), '. ', t.lastname), '') as teacher_fullname,
+            COALESCE(CONCAT(d.code, ' ', d.name), '') as discipline_name
+            FROM replacements r
+            JOIN replacement_components rc ON r.became_id = rc.id
+            JOIN slots s ON rc.slot_id = s.id
+            JOIN teachers t ON rc.teacher_id = t.id
+            JOIN disciplines d ON rc.discipline_id = d.id
+            JOIN groups g ON r.group_id = g.id
+            WHERE r.date = :date 
+            AND CONCAT(t.lastname, ' ', t.name, ' ', t.surname) = :fullname  
+            AND s.id = :slot_id");
+        $statement->execute(['date' => $date, 'fullname' => $fullname, 'slot_id' => $slot_id]);
+        $data = $statement->fetch();
+        return $data;
+    }
+
 }
+

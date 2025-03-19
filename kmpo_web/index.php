@@ -8,7 +8,7 @@
             <h1>Добро пожаловать в систему замен КМПО РАНХиГС!</h1>
             <p>Здесь вы можете просматривать актуальные замены, вносить изменения и находить ответы на часто задаваемые вопросы.</p>
             <div class="cta-buttons">
-                <a href="./replacements.php" class="cta-btn">Просмотр замен</a>
+                <a href="replacements.php" class="cta-btn">Просмотр замен</a>
                 <a href="add_replacement.php" class="cta-btn">Внесение замен</a>
             </div>
         </section>
