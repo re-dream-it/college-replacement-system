@@ -17,40 +17,26 @@
                 <input autocomplete="off" type="text" id="group" name="group" placeholder="Например: 201-СА-23" required>
             </div>
 
-            
-            <div class="form-group-cb">
-                <label for="type">Тип замены:</label>
-                <div class="dropdown-checkbox">
-                    <button type="button" class="dropdown-toggle">Выберите типы замен</button>
-                    <div class="dropdown-content">
-                        <label><input class="cb" type="checkbox" name="type" value="teacher"> Замена преподавателя</label>
-                        <label><input class="cb" type="checkbox" name="type" value="discipline"> Замена дисциплины</label>
-                        <label><input class="cb" type="checkbox" name="type" value="cancel"> Отмена занятия</label>
-                        <label><input class="cb" type="checkbox" name="type" value="remote"> Замена на дистанционный формат</label>
-                    </div>
-                </div>
-            </div>
-
             <div class="form-group form-title"><b>Было:</b></div>
 
             <div class="form-group">
                 <label for="oldTeacher">Преподаватель:</label>
-                <input autocomplete="off" type="text" id="oldTeacher" name="oldTeacher" placeholder="Например: Иванов И.И." required>
+                <input autocomplete="off" type="text" id="oldTeacher" name="oldTeacher" placeholder="Например: Иванов И.И.">
             </div>
 
             <div class="form-group">
                 <label for="oldDiscipline">Дисциплина:</label>
-                <input autocomplete="off" type="text" id="oldDiscipline" name="oldDiscipline" placeholder="Например: СО.02.01 Математика" required>
+                <input autocomplete="off" type="text" id="oldDiscipline" name="oldDiscipline" placeholder="Например: СО.02.01 Математика">
             </div>
 
             <div class="form-group">
                 <label for="oldPair">Номер пары:</label>
-                <input autocomplete="off" type="number" id="oldPair" name="oldPair" placeholder="Например: 2" required>
+                <input autocomplete="off" type="number" id="oldPair" name="oldPair" placeholder="Например: 2">
             </div>
 
             <div class="form-group">
                 <label for="oldRoom">Кабинет:</label>
-                <input autocomplete="off" type="text" id="oldRoom" name="oldRoom" placeholder="Например: 412" required>
+                <input autocomplete="off" type="text" id="oldRoom" name="oldRoom" placeholder="Например: 412">
             </div>
 
             <div class="form-group form-title"><b>Стало:</b></div>
@@ -75,9 +61,9 @@
                 <input autocomplete="off" type="text" id="newRoom" name="newRoom" placeholder="Например: 412">
             </div>
 
-            <div class="form-group-cb">
+            <!-- <div class="form-group-cb">
                 <label>Согласовано: <input class="cb" type="checkbox" name="type" value="confirmed"></label>
-            </div>
+            </div> -->
 
             <div class="form-group">
                 <button type="submit" class="submit-btn">Добавить замену</button>

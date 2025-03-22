@@ -6,4 +6,4 @@ from db import DB
 
 bot = Bot(BOT_TOKEN) # Bot
 dp = Dispatcher() # Bot's dispatcher
-db = DB('db.db') # Database
+db = DB(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME) # Database

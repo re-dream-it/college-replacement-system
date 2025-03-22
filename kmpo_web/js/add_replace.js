@@ -1,5 +1,15 @@
 // Dropdown для вариантов заполнения.
 document.addEventListener('DOMContentLoaded', function () {
+
+    // Загружаем данные для сегодняшней даты при загрузке страницы
+    const dateField = document.getElementById('date')
+
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+    dateField.value = tomorrowFormatted; 
+
     const fields = ['group', 'oldTeacher', 'oldDiscipline', 'newTeacher', 'newDiscipline'];
 
     fields.forEach(fieldId => {
@@ -64,10 +74,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const date = document.getElementById('date').value.trim();
         today = new Date().toISOString().split('T')[0];
-        // if (date < today) {
-        //     alert('Дата не может быть раньше текущей.');
-        //     isValid = false;
-        // }
+        if (date < today) {
+            alert('Дата не может быть раньше текущей.');
+            isValid = false;
+        }
 
         for (const field of fieldsToCheck) {
             const input = document.getElementById(field.id);
@@ -85,11 +95,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        // Проверка занятости кабинета.
-
         const newPair = document.getElementById('newPair').value
         const group = document.getElementById('group').value
 
+        // Проверка занятости кабинета.
         if (!isValid) {return;}
         const newRoom = document.getElementById('newRoom').value
         let response = await fetch(`functions/check_replace.php?type=room&value=${newRoom}&date=${date}&newPair=${newPair}`);
@@ -100,6 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
             isValid = isConfirmedRoom;
         }
 
+        // Проверка занятости преподавателя.
         if (!isValid) {return;}
         const newTeacher = document.getElementById('newTeacher').value
         response = await fetch(`functions/check_replace.php?type=teacher&value=${newTeacher}&date=${date}&newPair=${newPair}`);
@@ -111,8 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
   
         if (isValid) {
-            alert('Форма отправлена!')
-            // submitForm();
+            submitForm();
         }
     });
 
@@ -132,6 +141,12 @@ document.addEventListener('DOMContentLoaded', function () {
             if (result.success) {
                 alert('Замена успешно добавлена!');
                 form.reset();
+                const dateField = document.getElementById('date')
+                const today = new Date();
+                const tomorrow = new Date(today);
+                tomorrow.setDate(today.getDate() + 1);
+                const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+                dateField.value = tomorrowFormatted; 
             } else {
                 alert('Ошибка: ' + result.message);
             }
@@ -140,4 +155,5 @@ document.addEventListener('DOMContentLoaded', function () {
             alert('Произошла ошибка при отправке формы.');
         }
     }
+
 });

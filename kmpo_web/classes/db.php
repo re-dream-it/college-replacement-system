@@ -59,7 +59,7 @@ class WebDatabase extends DataBase
             GROUP BY 
                 r.id
             ORDER BY 
-                r.id;
+                r.id DESC;
         ");
         $statement->execute([$date]);
         $data = $statement->fetchAll();
@@ -76,7 +76,7 @@ class WebDatabase extends DataBase
 
     // Подсказки дисциплин
     public function getDisciplineFields($table, $fieldName, $query){
-        $statement = $this->pdo->prepare("SELECT DISTINCT $fieldName FROM $table 
+        $statement = $this->pdo->prepare("SELECT DISTINCT $fieldName FROM `disciplines`
                         WHERE name LIKE :query
                         OR code LIKE :query
                         LIMIT 10;");
@@ -90,7 +90,7 @@ class WebDatabase extends DataBase
 
     // Подсказки ФИО преподавателей
     public function getNameFields($table, $fieldName, $query){
-        $statement = $this->pdo->prepare("SELECT DISTINCT $fieldName FROM $table 
+        $statement = $this->pdo->prepare("SELECT DISTINCT $fieldName FROM `teachers`
                         WHERE name LIKE :query
                         OR lastname LIKE :query
                         OR surname LIKE :query
@@ -105,7 +105,7 @@ class WebDatabase extends DataBase
 
     // Подсказки группы
     public function getGroupFields($table, $fieldName, $query){
-        $statement = $this->pdo->prepare("SELECT DISTINCT $fieldName FROM $table 
+        $statement = $this->pdo->prepare("SELECT DISTINCT $fieldName FROM `groups`
                         WHERE name LIKE :query
                         LIMIT 10;");
         $statement->execute(['query' => "%$query%"]);
@@ -115,7 +115,7 @@ class WebDatabase extends DataBase
 
     // Проверка существования ФИО преподавателя
     public function checkNameValue($table, $query){
-        $statement = $this->pdo->prepare("SELECT COUNT(*) FROM $table 
+        $statement = $this->pdo->prepare("SELECT COUNT(*) FROM `teachers`
                         WHERE CONCAT(lastname, ' ', name, ' ', surname) = :query;");
         $statement->execute(['query' => $query]);
         $data = $statement->fetchColumn();
@@ -124,7 +124,7 @@ class WebDatabase extends DataBase
 
     // Проверка существования дисциплины
     public function checkDisciplineValue($table, $query){
-        $statement = $this->pdo->prepare("SELECT COUNT(*) FROM $table 
+        $statement = $this->pdo->prepare("SELECT COUNT(*) FROM `disciplines`
                         WHERE CONCAT(code, ' ', name) = :query;");
         $statement->execute(['query' => $query]);
         $data = $statement->fetchColumn();
@@ -133,7 +133,7 @@ class WebDatabase extends DataBase
 
     // Проверка существования группы
     public function checkGroupValue($table, $query){
-        $statement = $this->pdo->prepare("SELECT COUNT(*) FROM $table 
+        $statement = $this->pdo->prepare("SELECT COUNT(*) FROM `groups`
                         WHERE name = :query;");
         $statement->execute(['query' => $query]);
         $data = $statement->fetchColumn();
@@ -142,7 +142,7 @@ class WebDatabase extends DataBase
 
     // Проверка существования слота (пары)
     public function checkSlotValue($table, $query){
-        $statement = $this->pdo->prepare("SELECT COUNT(*) FROM $table 
+        $statement = $this->pdo->prepare("SELECT COUNT(*) FROM `slots`
                         WHERE id = :query;");
         $statement->execute(['query' => $query]);
         $data = $statement->fetchColumn();
@@ -195,5 +195,95 @@ class WebDatabase extends DataBase
         return $data;
     }
 
+    // Получение ID учителя по ФИО
+    public function getTeacherID($fullname){
+        $statement = $this->pdo->prepare("SELECT id FROM `teachers`
+                        WHERE CONCAT(lastname, ' ', name, ' ', surname) = :query;");
+        $statement->execute(['query' => $fullname]);
+        $data = $statement->fetchColumn();
+        return $data;
+    }
+
+    // Получение ID дисциплины по Коду и Названию
+    public function getDisciplineID($name){
+        $statement = $this->pdo->prepare("SELECT id FROM `disciplines`
+                        WHERE CONCAT(code, ' ', name) = :query;");
+        $statement->execute(['query' => $name]);
+        $data = $statement->fetchColumn();
+        return $data;
+    }
+
+    // Получение сотрудника
+    public function getGroupID($name){
+        $statement = $this->pdo->prepare("SELECT id FROM groups WHERE name = ?");
+        $statement->execute([$name]);
+        $data = $statement->fetchColumn();
+        return $data;
+    }
+
+    // Добавление компонента замены
+    public function addReplaceComponent($cabinet, $teacher_fullname, $slot_id, $discipline_name){
+        $teacher_id = $this->getTeacherID($teacher_fullname);
+        $discipline_id = $this->getDisciplineID($discipline_name);
+
+        $statement = $this->pdo->prepare("INSERT INTO replacement_components (cabinet, teacher_id, slot_id, discipline_id) VALUES (:cabinet, :teacher_id, :slot_id, :discipline_id);");
+        $statement->execute(['cabinet' => $cabinet, 'teacher_id' => $teacher_id, 'slot_id' => $slot_id, 'discipline_id' => $discipline_id]);
+
+        $component_id = $this->pdo->lastInsertId();
+        return $component_id;
+    }
+
+    // Добавление типов к замене
+    public function addReplacementType($replacement_id, $type_id){
+        $statement = $this->pdo->prepare("INSERT INTO replacement_types (type_id, replace_id) VALUES (:type_id, :replace_id);");
+        $statement->execute(['type_id' => $type_id, 'replace_id' => $replacement_id]);
+        return true;
+    }
+
+    // Добавление замены
+    public function addReplacement($replace, $oldEmpty, $newEmpty, $author_id){
+        // Проверка на наличие указания старого компонента.
+        if ($oldEmpty) $old_componentId = NULL;
+        else $old_component = $this->addReplaceComponent($replace['oldRoom'], $replace['oldTeacher'], $replace['oldPair'], $replace['oldDiscipline']); 
+
+        // Проверка на наличие указания нового компонента.
+        if($newEmpty) $new_component = NULL;
+        else $new_component = $this->addReplaceComponent($replace['newRoom'], $replace['newTeacher'], $replace['newPair'], $replace['newDiscipline']);
+
+        // Проверка изменений, если старый и новый компоненты указаны
+        if (!$oldEmpty && !$newEmpty) {
+            if ($replace['oldTeacher'] !== $replace['newTeacher']) {
+                $changes[] = 1; // Замена преподавателя
+            }
+            if (($replace['oldRoom'] !== $replace['newRoom']) && ($replace['newRoom'] !== 'ДИСТАНТ')) {
+                $changes[] = 2; // Замена кабинета
+            }
+            if ($replace['oldDiscipline'] !== $replace['newDiscipline']) {
+                $changes[] = 3; // Замена дисциплины
+            }
+            if ($replace['oldPair'] !== $replace['newPair']) {
+                $changes[] = 7; // Перенос пары
+            }
+        } elseif ($oldEmpty && !$newEmpty) {
+            $changes = [5]; // Добавление пары
+        } elseif (!$oldEmpty && $newEmpty) {
+            $changes = [4]; // Отмена пары
+        } 
+        if (isset($replace['newRoom']) && $replace['newRoom'] === 'ДИСТАНТ') {
+            $changes[] = 6; // Дистанционный формат
+        }
+
+        $group_id = $this->getGroupID($replace['group']);
+
+        $statement = $this->pdo->prepare("INSERT INTO replacements (confirmed, date, author_id, group_id, was_id, became_id) VALUES (:confirmed, :date, :author_id, :group_id, :was_id, :became_id)");
+        $statement->execute(['confirmed' => true, 'date' => $replace['date'], 'author_id' => $author_id, 'group_id' => $group_id, 'was_id' => $old_component, 'became_id' => $new_component]);
+        $replacement_id = $this->pdo->lastInsertId();
+
+        foreach ($changes as $change_id){
+            $this->addReplacementType($replacement_id, $change_id);
+        }
+
+        return $replacement_id;
+    }
 }
 

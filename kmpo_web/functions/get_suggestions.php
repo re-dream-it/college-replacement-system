@@ -1,6 +1,6 @@
 <?php
 require_once 'db.php';
-
+require_once 'check_auth.php';
 
 $field = $_GET['field'] ?? '';
 $query = $_GET['query'] ?? '';
