@@ -809,8 +809,6 @@ form {
 }
 
 /* Убираем центрирование для заголовков и текста в секциях */
-.welcome-section h1,
-.welcome-section p,
 .about-section h2,
 .about-section p,
 .about-section ul {
