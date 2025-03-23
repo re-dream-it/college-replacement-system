@@ -1,9 +1,3 @@
-<? session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: /replacements");
-    exit;
-}?>
-
 <? include "head.php"; ?>
 <? include "header.php"; ?>
 <body>
