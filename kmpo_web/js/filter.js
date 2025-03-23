@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const response = await fetch(`functions/get_replaces.php?date=${date}`);
             if (!response.ok) throw new Error('Ошибка при загрузке данных');
             replacementsData = await response.json();
-            applyFilters(); 
+            applyFilters();
         } catch (error) {
             console.error('Ошибка:', error);
         }
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
     function applyFilters() {
         if (replacementsData.length === 0) {
             const tbody = document.querySelector('table tbody');
-            tbody.innerHTML = ''; 
+            tbody.innerHTML = '';
             tbody.innerHTML = `<tr><td colspan="12" style="text-align: center;">Нет данных для отображения</td></tr>`;
             return;
         }
@@ -40,15 +40,15 @@ document.addEventListener('DOMContentLoaded', function () {
         // Фильтруем данные
         const filteredData = replacementsData.filter(replace => {
             const matchesGroup = group ? replace.group_name.toLowerCase().includes(group) : true;
-            const matchesTeacher = teacher ? 
-                (replace.was_teacher_fullname.toLowerCase().includes(teacher) || 
-                 replace.became_teacher_fullname.toLowerCase().includes(teacher)) : true;
-            const matchesDiscipline = discipline ? 
-                (replace.was_discipline.toLowerCase().includes(discipline) || 
-                 replace.became_discipline.toLowerCase().includes(discipline)) : true;
-            const matchesPair = pair ? 
+            const matchesTeacher = teacher ?
+                (replace.was_teacher_fullname.toLowerCase().includes(teacher) ||
+                    replace.became_teacher_fullname.toLowerCase().includes(teacher)) : true;
+            const matchesDiscipline = discipline ?
+                (replace.was_discipline.toLowerCase().includes(discipline) ||
+                    replace.became_discipline.toLowerCase().includes(discipline)) : true;
+            const matchesPair = pair ?
                 (replace.was_slot_id === pair || replace.became_slot_id === pair) : true;
-            const matchesType = selectedTypes.length > 0 ? 
+            const matchesType = selectedTypes.length > 0 ?
                 selectedTypes.some(type => replace.replacement_types.includes(type)) : true;
 
             return matchesGroup && matchesTeacher && matchesDiscipline && matchesPair && matchesType;
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Функция для обновления таблицы
     function renderTable(data) {
         const tbody = document.querySelector('table tbody');
-        tbody.innerHTML = ''; 
+        tbody.innerHTML = '';
 
         if (data.length === 0) {
             // Если данных нет
@@ -85,20 +85,58 @@ document.addEventListener('DOMContentLoaded', function () {
                 <td class="became">${replace.became_slot_id}</td>
                 <td class="became">${replace.became_cabinet}</td>
             `;
+            if (window.location.pathname == '/admin_replacements') {
+                row.innerHTML += `<td class="delete-td"><button type="button" data-replacement-id="${replace.replacement_id}" class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>`;
+            }
             tbody.appendChild(row);
+        });
+
+        // Добавляем обработчики для кнопок удаления
+        addDeleteHandlers();
+    }
+
+    // Функция для добавления обработчиков удаления
+    function addDeleteHandlers() {
+        const deleteButtons = document.querySelectorAll('.delete-btn');
+        deleteButtons.forEach(button => {
+            button.addEventListener('click', async function () {
+                const replacementId = this.getAttribute('data-replacement-id');
+                if (confirm('Вы уверены, что хотите удалить эту замену?')) {
+                    await deleteReplacement(replacementId);
+                    loadReplacementsByDate(dateFilter.value); // Перезагружаем данные
+                }
+            });
         });
     }
 
-    // Загружаем данные для сегодняшней даты при загрузке страницы
-    const today = new Date().toISOString().split('T')[0]; // Формат YYYY-MM-DD
-    dateFilter.value = today; // Устанавливаем сегодняшнюю дату в поле
-    loadReplacementsByDate(today);
+    // Функция для удаления замены
+    async function deleteReplacement(replacementId) {
+        try {
+            const response = await fetch(`functions/delete_replacement.php?replacement_id=${replacementId}`, {
+                method: 'DELETE'
+            });
+            if (!response.ok) throw new Error('Ошибка при удалении замены');
+            const result = await response.json();
+            alert(result.message);
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
+
+
+
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
+    dateFilter.value = tomorrowFormatted; 
+    loadReplacementsByDate(tomorrowFormatted);
 
     // Обработчики событий для фильтров
     dateFilter.addEventListener('change', function () {
         const selectedDate = dateFilter.value;
         if (selectedDate) {
-            loadReplacementsByDate(selectedDate); 
+            loadReplacementsByDate(selectedDate);
         }
     });
 

@@ -14,10 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Успешная авторизация
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['login'];
-        header("Location: /index.php");
+        header("Location: /index");
     } else {
         echo "Неверное имя пользователя или пароль.";
-        header("Location: /login.php");
+        header("Location: /login");
     }
 }
 ?>

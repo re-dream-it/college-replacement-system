@@ -1,7 +1,7 @@
 <!-- Хедер -->
 <? session_start();
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /login.php");
+    header("Location: /login");
     exit;
 }?>
 <header>
@@ -10,9 +10,9 @@ if (!isset($_SESSION['user_id'])) {
         <nav>
             <ul>
                 <li><a href="/">Главная</a></li>
-                <li><a href="replacements.php">Просмотр замен</a></li>
-                <li><a href="add_replacement.php">Внесение замен</a></li>
-                <li><a href="faq.php">FAQ</a></li>
+                <li><a href="admin_replacements">Просмотр замен</a></li>
+                <li><a href="add_replacement">Внесение замен</a></li>
+                <li><a href="faq">FAQ</a></li>
             </ul>
         </nav>
         <div class="logout-section">

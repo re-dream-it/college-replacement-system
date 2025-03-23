@@ -1,6 +1,12 @@
-
 <? include "head.php"; ?>
-<? include "header.php"; ?>
+<header>
+    <div class="header-content">
+        <img src="images/logo_bw.png" alt="Логотип колледжа" class="logo">
+        <a href="https://t.me/kmporeplace_bot" class="tg-btn" target="_blank">
+            <i class="fab fa-telegram"></i> Бот с заменами
+        </a>
+    </div>
+</header>
 <body>
     <main>
         <h1>Просмотр замен</h1>
@@ -23,17 +29,6 @@
             <input type="text" id="disciplineFilter" placeholder="Код дисциплины / Дисциплина">
             <input type="text" id="pairFilter" placeholder="Номер пары">
         </div>
-
-        
-        <div class="export-buttons">
-            <button type="button" id="exportExcel" class="export-btn">
-                <i class="fas fa-file-excel"></i> 
-            </button>
-            <button type="button" id="exportPDF" class="export-btn">
-                <i class="fas fa-file-pdf"></i> 
-            </button>
-        </div>
-
         <table>
             <thead>
                 <tr>
@@ -55,19 +50,14 @@
                     <th class="became">Дисциплина</th>
                     <th class="became">Номер пары</th>
                     <th class="became">Кабинет</th>
-                    <th class="hidden_tab"></th>
                 </tr>
-
             </thead>
-            <tbody>       
-                <!-- Данные будут добавляться сюда динамически (filter.js) -->
+            <tbody>
+                <!-- Данные будут добавляться сюда динамически -->
             </tbody>
         </table>
     </main>
 </body>
 
-
 <script src="js/filter.js"></script>
-<script src="js/export.js"></script>
 <? include "footer.php"; ?>
-                

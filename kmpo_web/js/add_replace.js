@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (result.success) {
                 alert('Замена успешно добавлена!');
-                form.reset();
+                // form.reset();
                 const dateField = document.getElementById('date')
                 const today = new Date();
                 const tomorrow = new Date(today);

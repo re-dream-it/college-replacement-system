@@ -7,6 +7,7 @@ from aiohttp import web
 async def start_http_server():
 	app = web.Application()
 	app.router.add_post('/replace_notify', handlers.accept_replace)
+	app.router.add_post('/replace_delete', handlers.delete_replace)
 	runner = web.AppRunner(app)
 	await runner.setup()
      

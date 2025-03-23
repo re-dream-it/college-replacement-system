@@ -370,6 +370,11 @@ table tr:hover td.became {
     background-color: #99ff99; /* Затемнение при наведении для .became */
 }
 
+table tr:hover td.delete-td {
+    transition: 0.3s;
+    background-color: #ffffff; /* Затемнение при наведении для .became */
+}
+
 /* Затемнение при наведении на строку для всех ячеек */
 table tr:hover td {
     transition: 0.3s;
@@ -381,7 +386,7 @@ table tr:hover td {
 } */
 
 /* Кнопка редактирования */
-.edit-btn {
+.delete-btn {
     background: none;
     border: none;
     color: #B90039;
@@ -390,8 +395,13 @@ table tr:hover td {
     transition: color 0.3s ease;
 }
 
-.edit-btn:hover {
+
+
+.delete-btn:hover {
     color: #A00030;
+}
+.delete-td{
+    background: #fff;
 }
 
 .no_bg{

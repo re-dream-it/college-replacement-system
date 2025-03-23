@@ -9,7 +9,6 @@ require_once 'db_init.php';
 
 class WebDatabase extends DataBase
 {
-
     // Получение списка замен
     public function getReplaces($date){
         $statement = $this->pdo->prepare("SELECT 
@@ -68,6 +67,14 @@ class WebDatabase extends DataBase
 
     // Получение доступных типов замен
     public function getTypes(){
+        $statement = $this->pdo->prepare("SELECT * FROM `types` ORDER BY `id`");
+        $statement->execute();
+        $data = $statement->fetchAll();
+        return $data;
+    }
+
+    // Получение доступных типов замен
+    public function deleteReplace(){
         $statement = $this->pdo->prepare("SELECT * FROM `types` ORDER BY `id`");
         $statement->execute();
         $data = $statement->fetchAll();
@@ -242,48 +249,104 @@ class WebDatabase extends DataBase
 
     // Добавление замены
     public function addReplacement($replace, $oldEmpty, $newEmpty, $author_id){
-        // Проверка на наличие указания старого компонента.
-        if ($oldEmpty) $old_componentId = NULL;
-        else $old_component = $this->addReplaceComponent($replace['oldRoom'], $replace['oldTeacher'], $replace['oldPair'], $replace['oldDiscipline']); 
+        try {
+            // Начинаем транзакцию
+            $this->pdo->beginTransaction();
 
-        // Проверка на наличие указания нового компонента.
-        if($newEmpty) $new_component = NULL;
-        else $new_component = $this->addReplaceComponent($replace['newRoom'], $replace['newTeacher'], $replace['newPair'], $replace['newDiscipline']);
+            // Проверка на наличие указания старого компонента.
+            if ($oldEmpty) $old_componentId = NULL;
+            else $old_component = $this->addReplaceComponent($replace['oldRoom'], $replace['oldTeacher'], $replace['oldPair'], $replace['oldDiscipline']); 
 
-        // Проверка изменений, если старый и новый компоненты указаны
-        if (!$oldEmpty && !$newEmpty) {
-            if ($replace['oldTeacher'] !== $replace['newTeacher']) {
-                $changes[] = 1; // Замена преподавателя
+            // Проверка на наличие указания нового компонента.
+            if($newEmpty) $new_component = NULL;
+            else $new_component = $this->addReplaceComponent($replace['newRoom'], $replace['newTeacher'], $replace['newPair'], $replace['newDiscipline']);
+
+            // Проверка изменений, если старый и новый компоненты указаны
+            if (!$oldEmpty && !$newEmpty) {
+                if ($replace['oldTeacher'] !== $replace['newTeacher']) {
+                    $changes[] = 1; // Замена преподавателя
+                }
+                if (($replace['oldRoom'] !== $replace['newRoom']) && ($replace['newRoom'] !== 'ДИСТАНТ')) {
+                    $changes[] = 2; // Замена кабинета
+                }
+                if ($replace['oldDiscipline'] !== $replace['newDiscipline']) {
+                    $changes[] = 3; // Замена дисциплины
+                }
+                if ($replace['oldPair'] !== $replace['newPair']) {
+                    $changes[] = 7; // Перенос пары
+                }
+            } elseif ($oldEmpty && !$newEmpty) {
+                $changes = [5]; // Добавление пары
+            } elseif (!$oldEmpty && $newEmpty) {
+                $changes = [4]; // Отмена пары
+            } 
+            if (isset($replace['newRoom']) && $replace['newRoom'] === 'ДИСТАНТ') {
+                $changes[] = 6; // Дистанционный формат
             }
-            if (($replace['oldRoom'] !== $replace['newRoom']) && ($replace['newRoom'] !== 'ДИСТАНТ')) {
-                $changes[] = 2; // Замена кабинета
+
+            $group_id = $this->getGroupID($replace['group']);
+
+            $statement = $this->pdo->prepare("INSERT INTO replacements (confirmed, date, author_id, group_id, was_id, became_id) VALUES (:confirmed, :date, :author_id, :group_id, :was_id, :became_id)");
+            $statement->execute(['confirmed' => true, 'date' => $replace['date'], 'author_id' => $author_id, 'group_id' => $group_id, 'was_id' => $old_component, 'became_id' => $new_component]);
+            $replacement_id = $this->pdo->lastInsertId();
+
+            foreach ($changes as $change_id){
+                $this->addReplacementType($replacement_id, $change_id);
             }
-            if ($replace['oldDiscipline'] !== $replace['newDiscipline']) {
-                $changes[] = 3; // Замена дисциплины
-            }
-            if ($replace['oldPair'] !== $replace['newPair']) {
-                $changes[] = 7; // Перенос пары
-            }
-        } elseif ($oldEmpty && !$newEmpty) {
-            $changes = [5]; // Добавление пары
-        } elseif (!$oldEmpty && $newEmpty) {
-            $changes = [4]; // Отмена пары
+
+            // Фиксируем транзакцию
+            $this->pdo->commit();
+            return $replacement_id;
         } 
-        if (isset($replace['newRoom']) && $replace['newRoom'] === 'ДИСТАНТ') {
-            $changes[] = 6; // Дистанционный формат
+        catch (Exception $e) {
+            // Откатываем транзакцию в случае ошибки
+            $this->pdo->rollBack();
+            error_log("Ошибка при удалении замены: " . $e->getMessage());
+            return false; // Ошибка удаления
         }
-
-        $group_id = $this->getGroupID($replace['group']);
-
-        $statement = $this->pdo->prepare("INSERT INTO replacements (confirmed, date, author_id, group_id, was_id, became_id) VALUES (:confirmed, :date, :author_id, :group_id, :was_id, :became_id)");
-        $statement->execute(['confirmed' => true, 'date' => $replace['date'], 'author_id' => $author_id, 'group_id' => $group_id, 'was_id' => $old_component, 'became_id' => $new_component]);
-        $replacement_id = $this->pdo->lastInsertId();
-
-        foreach ($changes as $change_id){
-            $this->addReplacementType($replacement_id, $change_id);
-        }
-
-        return $replacement_id;
     }
+
+    // Удаление замены и её дочерних компонентов
+    public function deleteReplacement($replacement_id) {
+        try {
+            // Начинаем транзакцию
+            $this->pdo->beginTransaction();
+
+            // 1. Удаляем связанные записи из таблицы replacement_types
+            $statement = $this->pdo->prepare("DELETE FROM replacement_types WHERE replace_id = ?");
+            $statement->execute([$replacement_id]);
+
+            // 2. Получаем ID компонентов замены (was_id и became_id)
+            $statement = $this->pdo->prepare("SELECT was_id, became_id FROM replacements WHERE id = ?");
+            $statement->execute([$replacement_id]);
+            $components = $statement->fetch(PDO::FETCH_ASSOC);
+
+            // 3. Удаляем саму замену
+            $statement = $this->pdo->prepare("DELETE FROM replacements WHERE id = ?");
+            $statement->execute([$replacement_id]);
+
+            // 4. Удаляем компоненты замены (если они существуют)
+            if ($components['was_id']) {
+                $statement = $this->pdo->prepare("DELETE FROM replacement_components WHERE id = ?");
+                $statement->execute([$components['was_id']]);
+            }
+            if ($components['became_id']) {
+                $statement = $this->pdo->prepare("DELETE FROM replacement_components WHERE id = ?");
+                $statement->execute([$components['became_id']]);
+            }
+            
+
+            // Фиксируем транзакцию
+            $this->pdo->commit();
+
+            return true; 
+        } catch (Exception $e) {
+            // Откатываем транзакцию в случае ошибки
+            $this->pdo->rollBack();
+            echo("Ошибка при удалении замены: " . $e->getMessage());
+            return false; 
+        }
+    }
+
 }
 
