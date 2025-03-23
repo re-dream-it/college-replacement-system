@@ -1,12 +1,6 @@
 <? include "head.php"; ?>
-<header>
-    <div class="header-content">
-        <img src="images/logo_bw.png" alt="Логотип колледжа" class="logo">
-        <a href="https://t.me/kmporeplace_bot" class="tg-btn" target="_blank">
-            <i class="fab fa-telegram"></i> Бот с заменами
-        </a>
-    </div>
-</header>
+<?php include "public_header.php"; ?>
+
 <body>
     <main>
         <h1>Просмотр замен</h1>

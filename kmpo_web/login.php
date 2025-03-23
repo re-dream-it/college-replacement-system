@@ -4,11 +4,7 @@ if (isset($_SESSION['user_id'])) {
     header("Location: /");
     exit;
 }?>
-<header>
-    <div class="header-content">
-        <img src="images/logo_bw.png" alt="Логотип колледжа" class="logo">
-    </div>
-</header>
+<?php include "public_header.php"; ?>
 
 <body>
      <!-- Основной контент -->

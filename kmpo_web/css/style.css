@@ -779,3 +779,46 @@ form {
     background-color: #e0e0e0;
 }
 
+.about-section h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #B90039;
+}
+
+.about-section p {
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+}
+
+.about-section ul {
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+.about-section ul li {
+    list-style-type: disc;
+    margin-bottom: 5px;
+}
+
+/* Выравнивание текста по левому краю */
+.left-align {
+    background-color: #fff;
+    text-align: left;
+    margin-left: 20px; /* Отступ слева для лучшего визуального восприятия */
+}
+
+/* Убираем центрирование для заголовков и текста в секциях */
+.welcome-section h1,
+.welcome-section p,
+.about-section h2,
+.about-section p,
+.about-section ul {
+    text-align: left;
+    margin-left: 20px; /* Отступ слева */
+}
+
+/* Убираем центрирование для списков */
+.about-section ul {
+    padding-left: 40px; /* Отступ для списка */
+}
