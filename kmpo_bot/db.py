@@ -123,6 +123,11 @@ class DB:
     async def add_user(self, id: int, un: str):
         query = "INSERT INTO `users` (`id`, `username`) VALUES (%s, %s)"
         return self.execute(query, (id, un))
+    
+    # Добавление пользователя в базу данных
+    async def delete_user(self, id: int):
+        query = "DELETE FROM `users` WHERE id = %s"
+        return self.execute(query, (id,))
 
     # Обновление юзернейма пользователя
     async def update_username(self, id: int, un: str):

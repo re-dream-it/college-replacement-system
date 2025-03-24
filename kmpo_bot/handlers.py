@@ -153,7 +153,12 @@ async def send_notifications_background(data):
             await bot.send_message(user['id'], text, parse_mode='html', reply_markup=await keyboards.site_keyboard())
             await asyncio.sleep(1.2)
         except Exception as e:
-            await bot.send_message(LOG_CHAN, f'Ошибка в процессе рассылки №{replacement['replacement_id']}: <code>{str(e)}</code>', parse_mode='html')
+            print(e)
+            if 'bot was blocked by the user' in str(e):
+                await db.delete_user(user['id'])
+                print(f'Пользователь {user['id']} заблокировал бота и был удален из БД!')
+            else:
+                await bot.send_message(LOG_CHAN, f'Ошибка в процессе рассылки №{replacement['replacement_id']}: <code>{str(e)}</code>', parse_mode='html')
 
     await bot.send_message(LOG_CHAN, f'Рассылка замены №{replacement['replacement_id']} окончена!\nОтправлено сообщений: {i}')
 
@@ -180,8 +185,13 @@ async def send_del_notifications_background(replacement):
         try: 
             i+=1
             await bot.send_message(user['id'], text, parse_mode='html', reply_markup=await keyboards.site_keyboard())
-            await asyncio.sleep(1.2)
+            await asyncio.sleep(1.1)
         except Exception as e:
-            await bot.send_message(LOG_CHAN, f'Ошибка в процессе рассылки удаления замены №{replacement['replacement_id']}: <code>{str(e)}</code>', parse_mode='html')
+            print(e)
+            if 'bot was blocked by the user' in str(e):
+                db.delete_user(user['id'])
+                print(f'Пользователь {user['id']} заблокировал бота и был удален из БД!')
+            else:
+                await bot.send_message(LOG_CHAN, f'Ошибка в процессе рассылки удаления замены №{replacement['replacement_id']}: <code>{str(e)}</code>', parse_mode='html')
 
     await bot.send_message(LOG_CHAN, f'Рассылка удаления замены №{replacement['replacement_id']} окончена!\nОтправлено сообщений: {i}')
