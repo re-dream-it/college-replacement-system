@@ -2,3 +2,6 @@ RewriteEngine on
 RewriteCond %{REQUEST_FILENAME} !-d 
 RewriteCond %{REQUEST_FILENAME}\.php -f 
 RewriteRule ^(.*)$ $1.php 
+<Files config.php>
+Require ip 217.12.40.60
+</Files>

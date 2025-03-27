@@ -97,7 +97,7 @@ async def back(callback_query: types.CallbackQuery, state: FSMContext):
 # subscribe_group
 @dp.callback_query(lambda call: call.data == "subscribe_group")
 async def subscribe_group(callback_query: types.CallbackQuery, state: FSMContext):
-    await bot.edit_message_text(chat_id=callback_query.from_user.id, message_id=callback_query.message.message_id, text="📚 *Введите название группы*  \nПожалуйста, введите название вашей группы (например, `201-ИТ-23`).", parse_mode='markdown', reply_markup=await keyboards.back_keyboard())
+    await bot.edit_message_text(chat_id=callback_query.from_user.id, message_id=callback_query.message.message_id, text="📚 *Введите название группы*  \nПожалуйста, введите название вашей группы (например, `201-ИС-23`).", parse_mode='markdown', reply_markup=await keyboards.back_keyboard())
     await state.set_state(Subscribe.group)
 
 # subscribe_teacher
@@ -111,10 +111,13 @@ async def subscribe_teacher(callback_query: types.CallbackQuery, state: FSMConte
 async def group_entered(message: types.Message, state: FSMContext):
     group = await db.get_group_byname(message.text)
     if group:
+        await bot.send_message(LOG_CHAN, f'✅ Пользователь @{message.from_user.username} успешно подписался на {message.text}!')
+    
         await db.update_group(message.from_user.id, group['id'])
         await state.clear()
         await bot.send_message(message.from_user.id, f"✅ *Вы успешно подписались на группу* `{message.text}`.", parse_mode='markdown')
     else:
+        await bot.send_message(LOG_CHAN, f'❌ Пользователь @{message.from_user.username} не смог подписаться на {message.text}!')
         await bot.send_message(message.from_user.id, f"❌ *Группы* `{message.text}` *не существует.*\nПовторите ввод.", parse_mode='markdown')
 
 # teacher_entered
@@ -122,10 +125,14 @@ async def group_entered(message: types.Message, state: FSMContext):
 async def teacher_entered(message: types.Message, state: FSMContext):
     teacher = await db.get_teacher_byname(message.text)
     if teacher:
+        await bot.send_message(LOG_CHAN, f'✅ Пользователь @{message.from_user.username} успешно подписался на {message.text}!')
+
         await db.update_teacher(message.from_user.id, teacher['id'])
         await state.clear()
         await bot.send_message(message.from_user.id, f"✅ *Вы успешно подписались на преподавателя* `{message.text}`.", parse_mode='markdown')
     else:
+        await bot.send_message(LOG_CHAN, f'❌ Пользователь @{message.from_user.username} не смог подписаться на {message.text}!')
+        
         await bot.send_message(message.from_user.id, f"❌ *Преподавателя* `{message.text}` *не существует.*\nПовторите ввод.", parse_mode='markdown')
 
 # Обрабатываем запрос на добавление замены, создаем задачу
@@ -192,6 +199,6 @@ async def send_del_notifications_background(replacement):
                 db.delete_user(user['id'])
                 print(f'Пользователь {user['id']} заблокировал бота и был удален из БД!')
             else:
-                await bot.send_message(LOG_CHAN, f'Ошибка в процессе рассылки удаления замены №{replacement['replacement_id']}: <code>{str(e)}</code>', parse_mode='html')
+                await bot.send_message(LOG_CHAN, f'Ошибка в процессе рассылки удаления замены №{replacement['replacement_id']}: <code>{str(e)}</code>\nUID: {user['id']}', parse_mode='html')
 
     await bot.send_message(LOG_CHAN, f'Рассылка удаления замены №{replacement['replacement_id']} окончена!\nОтправлено сообщений: {i}')
