@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:3306
--- Время создания: Мар 28 2025 г., 17:45
+-- Время создания: Мар 30 2025 г., 16:43
 -- Версия сервера: 11.4.5-MariaDB-ubu2404
 -- Версия PHP: 8.3.17
 
@@ -40,8 +40,8 @@ CREATE TABLE `departments` (
 
 CREATE TABLE `disciplines` (
   `id` smallint(6) NOT NULL,
-  `code` varchar(10) NOT NULL,
-  `name` varchar(30) NOT NULL
+  `code` varchar(20) NOT NULL,
+  `name` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- --------------------------------------------------------
@@ -75,6 +75,17 @@ CREATE TABLE `groups` (
 -- --------------------------------------------------------
 
 --
+-- Структура таблицы `groups_disciplines`
+--
+
+CREATE TABLE `groups_disciplines` (
+  `group_id` smallint(6) NOT NULL,
+  `discipline_id` smallint(6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Структура таблицы `replacements`
 --
 
@@ -85,7 +96,8 @@ CREATE TABLE `replacements` (
   `author_id` smallint(6) NOT NULL,
   `group_id` smallint(6) NOT NULL,
   `was_id` int(11) DEFAULT NULL,
-  `became_id` int(11) DEFAULT NULL
+  `became_id` int(11) DEFAULT NULL,
+  `create_date` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- --------------------------------------------------------
@@ -111,6 +123,16 @@ CREATE TABLE `replacement_components` (
 CREATE TABLE `replacement_types` (
   `type_id` smallint(6) NOT NULL,
   `replace_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `rooms`
+--
+
+CREATE TABLE `rooms` (
+  `number` varchar(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- --------------------------------------------------------
@@ -178,8 +200,8 @@ ALTER TABLE `departments`
 --
 ALTER TABLE `disciplines`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `code` (`code`),
-  ADD UNIQUE KEY `name` (`name`);
+  ADD KEY `name` (`name`) USING BTREE,
+  ADD KEY `code` (`code`) USING BTREE;
 
 --
 -- Индексы таблицы `employes`
@@ -194,6 +216,13 @@ ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`),
   ADD KEY `department_id` (`department_id`);
+
+--
+-- Индексы таблицы `groups_disciplines`
+--
+ALTER TABLE `groups_disciplines`
+  ADD KEY `discipline_id` (`discipline_id`),
+  ADD KEY `group_id` (`group_id`);
 
 --
 -- Индексы таблицы `replacements`
@@ -220,6 +249,12 @@ ALTER TABLE `replacement_components`
 ALTER TABLE `replacement_types`
   ADD KEY `type_id` (`type_id`),
   ADD KEY `replace_id` (`replace_id`);
+
+--
+-- Индексы таблицы `rooms`
+--
+ALTER TABLE `rooms`
+  ADD PRIMARY KEY (`number`);
 
 --
 -- Индексы таблицы `slots`
@@ -311,6 +346,13 @@ ALTER TABLE `types`
 --
 ALTER TABLE `groups`
   ADD CONSTRAINT `group:department` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON UPDATE CASCADE;
+
+--
+-- Ограничения внешнего ключа таблицы `groups_disciplines`
+--
+ALTER TABLE `groups_disciplines`
+  ADD CONSTRAINT `groups_disciplines_ibfk_1` FOREIGN KEY (`discipline_id`) REFERENCES `disciplines` (`id`),
+  ADD CONSTRAINT `groups_disciplines_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`);
 
 --
 -- Ограничения внешнего ключа таблицы `replacements`
