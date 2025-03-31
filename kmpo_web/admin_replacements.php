@@ -16,6 +16,7 @@
             </div>
             <input required type="date" id="dateFilter">
             <input type="text" id="groupFilter" placeholder="Группа (например: 201-СА-23)">
+            <input type="text" id="roomFilter" placeholder="Кабинет (например: К612)">
         </div>
 
         <div class="filters">

@@ -20,7 +20,7 @@ if ($replacement_id){
             echo json_encode(['success' => true, 'message' => "Замена №$replacement_id была удалена!"]);
         }
     } catch (Exception $e) {
-        echo json_encode(['success' => false, 'message' => 'Возникла ошибка при удалении замены!']);
+        echo json_encode(['success' => false, 'message' => $e->getMessage()]);
     }    
 }
 else{

@@ -120,6 +120,16 @@ class WebDatabase extends DataBase
         return $data;
     }
 
+    // Подсказки кабинетов
+    public function getRoomFields($table, $fieldName, $query){
+        $statement = $this->pdo->prepare("SELECT DISTINCT $fieldName FROM `rooms`
+                        WHERE number LIKE :query
+                        LIMIT 10;");
+        $statement->execute(['query' => "%$query%"]);
+        $data = $statement->fetchAll(PDO::FETCH_COLUMN);
+        return $data;
+    }
+
     // Проверка существования ФИО преподавателя
     public function checkNameValue($table, $query){
         $statement = $this->pdo->prepare("SELECT COUNT(*) FROM `teachers`
@@ -142,6 +152,15 @@ class WebDatabase extends DataBase
     public function checkGroupValue($table, $query){
         $statement = $this->pdo->prepare("SELECT COUNT(*) FROM `groups`
                         WHERE name = :query;");
+        $statement->execute(['query' => $query]);
+        $data = $statement->fetchColumn();
+        return $data;
+    }
+
+    // Проверка существования группы
+    public function checkRoomExist($table, $query){
+        $statement = $this->pdo->prepare("SELECT COUNT(*) FROM `rooms`
+                        WHERE number = :query;");
         $statement->execute(['query' => $query]);
         $data = $statement->fetchColumn();
         return $data;

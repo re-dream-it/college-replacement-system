@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const teacherFilter = document.getElementById('teacherFilter');
     const disciplineFilter = document.getElementById('disciplineFilter');
     const pairFilter = document.getElementById('pairFilter');
+    const roomFilter = document.getElementById('roomFilter');
     const typeFilters = document.querySelectorAll('input[name="typeFilter"]');
 
     let replacementsData = [];
@@ -33,6 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const teacher = teacherFilter.value.trim().toLowerCase();
         const discipline = disciplineFilter.value.trim().toLowerCase();
         const pair = pairFilter.value.trim();
+        const room = roomFilter.value.trim().toLowerCase();
         const selectedTypes = Array.from(typeFilters)
             .filter(checkbox => checkbox.checked)
             .map(checkbox => checkbox.value);
@@ -40,6 +42,10 @@ document.addEventListener('DOMContentLoaded', function () {
         // Фильтруем данные
         const filteredData = replacementsData.filter(replace => {
             const matchesGroup = group ? replace.group_name.toLowerCase().includes(group) : true;
+            const matchesRoom = room ? 
+            (replace.was_cabinet.toLowerCase().includes(room) ||
+            replace.became_cabinet.toLowerCase().includes(room)) : true;
+            console.log("Filter room:", room);
             const matchesTeacher = teacher ?
                 (replace.was_teacher_fullname.toLowerCase().includes(teacher) ||
                     replace.became_teacher_fullname.toLowerCase().includes(teacher)) : true;
@@ -51,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const matchesType = selectedTypes.length > 0 ?
                 selectedTypes.some(type => replace.replacement_types.includes(type)) : true;
 
-            return matchesGroup && matchesTeacher && matchesDiscipline && matchesPair && matchesType;
+            return matchesGroup && matchesTeacher && matchesDiscipline && matchesPair && matchesType && matchesRoom;
         });
 
         renderTable(filteredData);
@@ -144,6 +150,7 @@ document.addEventListener('DOMContentLoaded', function () {
     teacherFilter.addEventListener('input', applyFilters);
     disciplineFilter.addEventListener('input', applyFilters);
     pairFilter.addEventListener('input', applyFilters);
+    roomFilter.addEventListener('input', applyFilters);
     typeFilters.forEach(checkbox => {
         checkbox.addEventListener('change', applyFilters);
     });

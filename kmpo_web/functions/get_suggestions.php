@@ -17,6 +17,8 @@ $tableMap = [
     'newTeacher' => ['table' => 'teachers', 'field' => 'lastname, name, surname'],
     'newDiscipline' => ['table' => 'disciplines', 'field' => 'code, name'],
     'group' => ['table' => "groups", 'field' => 'name'],
+    'oldRoom' => ['table' => "groups", 'field' => 'number'],
+    'newRoom' => ['table' => "groups", 'field' => 'number'],
 ];
 
 if (!isset($tableMap[$field])) {
@@ -38,6 +40,9 @@ elseif ($field === 'oldDiscipline' || $field === 'newDiscipline') {
 }
 elseif ($field === 'group') {
     $results = $DB->getGroupFields($table, $fieldName, $query);
+}
+elseif ($field === 'oldRoom' || $field === 'newRoom') {
+    $results = $DB->getRoomFields($table, $fieldName, $query);
 }
 
 

@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
     dateField.value = tomorrowFormatted; 
 
-    const fields = ['group', 'oldTeacher', 'oldDiscipline', 'newTeacher', 'newDiscipline'];
+    const fields = ['group', 'oldTeacher', 'oldDiscipline', 'newTeacher', 'newDiscipline', 'oldRoom', 'newRoom'];
 
     fields.forEach(fieldId => {
         const input = document.getElementById(fieldId);
@@ -68,6 +68,8 @@ document.addEventListener('DOMContentLoaded', function () {
             { id: 'newDiscipline', table: 'disciplines', field: 'name', rus: '[Стало] Дисциплина'   },
             { id: 'oldPair', table: 'slots', field: 'id', rus: '[Было] Пара' },
             { id: 'newPair', table: 'slots', field: 'id', rus: '[Стало] Пара' },
+            { id: 'oldRoom', table: 'rooms', field: 'number', rus: '[Было] Кабинет' },
+            { id: 'newRoom', table: 'rooms', field: 'number', rus: '[Стало] Кабинет' },
         ];
 
         let isValid = true;

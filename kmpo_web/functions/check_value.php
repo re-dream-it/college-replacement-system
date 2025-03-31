@@ -23,6 +23,9 @@ elseif ($table === 'groups') {
 elseif ($table === 'slots') {
     $result = $DB->checkSlotValue($table, $value);
 }
+elseif ($table === 'rooms') {
+    $result = $DB->checkRoomExist($table, $value);
+}
 else {
     throw new Exception("Недопустимое имя таблицы");
 }
