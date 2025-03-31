@@ -77,22 +77,39 @@ document.addEventListener('DOMContentLoaded', function () {
         // Наполнение таблицы
         data.forEach(replace => {
             const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${replace.replacement_id}</td>
-                <td>${replace.date}</td>
-                <td>${replace.group_name}</td>
-                <td>${replace.replacement_types}</td>
-                <td class="was">${replace.was_teacher_fullname}</td>
-                <td class="was">${replace.was_discipline}</td>
-                <td class="was">${replace.was_slot_id}</td>
-                <td class="was">${replace.was_cabinet}</td>
-                <td class="became">${replace.became_teacher_fullname}</td>
-                <td class="became">${replace.became_discipline}</td>
-                <td class="became">${replace.became_slot_id}</td>
-                <td class="became">${replace.became_cabinet}</td>
-            `;
             if (window.location.pathname == '/admin_replacements') {
-                row.innerHTML += `<td class="delete-td"><button type="button" data-replacement-id="${replace.replacement_id}" class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>`;
+                    row.innerHTML = `
+                    <td>${replace.replacement_id}</td>
+                    <td>${replace.date}</td>
+                    <td>${replace.group_name}</td>
+                    <td>${replace.replacement_types}</td>
+                    <td>${replace.reason}</td>
+                    <td class="was">${replace.was_teacher_fullname}</td>
+                    <td class="was">${replace.was_discipline}</td>
+                    <td class="was">${replace.was_slot_id}</td>
+                    <td class="was">${replace.was_cabinet}</td>
+                    <td class="became">${replace.became_teacher_fullname}</td>
+                    <td class="became">${replace.became_discipline}</td>
+                    <td class="became">${replace.became_slot_id}</td>
+                    <td class="became">${replace.became_cabinet}</td>
+                    <td class="delete-td"><button type="button" data-replacement-id="${replace.replacement_id}" class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>
+                `;
+            }
+            else if (window.location.pathname == '/replacements') {
+                row.innerHTML = `
+                    <td>${replace.replacement_id}</td>
+                    <td>${replace.date}</td>
+                    <td>${replace.group_name}</td>
+                    <td>${replace.replacement_types}</td>
+                    <td class="was">${replace.was_teacher_fullname}</td>
+                    <td class="was">${replace.was_discipline}</td>
+                    <td class="was">${replace.was_slot_id}</td>
+                    <td class="was">${replace.was_cabinet}</td>
+                    <td class="became">${replace.became_teacher_fullname}</td>
+                    <td class="became">${replace.became_discipline}</td>
+                    <td class="became">${replace.became_slot_id}</td>
+                    <td class="became">${replace.became_cabinet}</td>
+                `;
             }
             tbody.appendChild(row);
         });

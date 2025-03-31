@@ -11,6 +11,14 @@ if (empty($date)) {
 // Запрос к базе данных
 $replaces = $DB->getReplaces($date);
 
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    $i = 0;
+    foreach ($replaces as $replace){
+        unset($replaces[$i]['reason']);
+    }
+}
+
 // Возвращаем данные в формате JSON
 header('Content-Type: application/json');
 echo json_encode($replaces);

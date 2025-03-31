@@ -30,7 +30,6 @@
                     <th colspan="4" class="left">Общ. сведения</th>
                     <th colspan="4" class="was-header">Было</th>
                     <th colspan="4" class="became-header right">Стало</th>
-                    <th class="hidden_tab"></th>
                 </tr>
                 <tr>
                     <th>ID</th>

@@ -165,7 +165,7 @@ class DB:
             -- Основные сведения
             r.id AS replacement_id,
             r.date,
-            g.name AS group_name,
+            CONCAT(g.name, ' ', r.group_part) AS group_name,
             g.id AS group_id,
             t1.id AS was_teacher_id,
             t2.id AS became_teacher_id,

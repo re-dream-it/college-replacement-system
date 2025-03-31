@@ -38,7 +38,7 @@
         <table>
             <thead>
                 <tr>
-                    <th colspan="4" class="left">Общ. сведения</th>
+                    <th colspan="5" class="left">Общ. сведения</th>
                     <th colspan="4" class="was-header">Было</th>
                     <th colspan="4" class="became-header right">Стало</th>
                     <th class="hidden_tab"></th>
@@ -48,6 +48,7 @@
                     <th>Дата</th>
                     <th>Группа</th>
                     <th>Тип замены</th>
+                    <th>Причина</th>
                     <th class="was">Преподаватель</th>
                     <th class="was">Дисциплина</th>
                     <th class="was">Номер пары</th>

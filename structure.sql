@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:3306
--- Время создания: Мар 30 2025 г., 16:43
+-- Время создания: Мар 31 2025 г., 18:07
 -- Версия сервера: 11.4.5-MariaDB-ubu2404
 -- Версия PHP: 8.3.17
 
@@ -95,9 +95,11 @@ CREATE TABLE `replacements` (
   `date` date NOT NULL,
   `author_id` smallint(6) NOT NULL,
   `group_id` smallint(6) NOT NULL,
+  `group_part` varchar(12) DEFAULT NULL,
   `was_id` int(11) DEFAULT NULL,
   `became_id` int(11) DEFAULT NULL,
-  `create_date` datetime NOT NULL DEFAULT current_timestamp()
+  `create_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `reason` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- --------------------------------------------------------
@@ -132,7 +134,7 @@ CREATE TABLE `replacement_types` (
 --
 
 CREATE TABLE `rooms` (
-  `number` varchar(5) NOT NULL
+  `number` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 
 -- --------------------------------------------------------

@@ -15,7 +15,8 @@ class WebDatabase extends DataBase
             -- Основные сведения
             r.id AS replacement_id,
             r.date,
-            g.name AS group_name,
+            CONCAT(g.name, ' ', r.group_part) AS group_name,
+            r.reason AS reason,
             
             -- Было
             COALESCE(GROUP_CONCAT(ty.name SEPARATOR ', '), '') AS replacement_types,
@@ -305,8 +306,8 @@ class WebDatabase extends DataBase
 
             $group_id = $this->getGroupID($replace['group']);
 
-            $statement = $this->pdo->prepare("INSERT INTO replacements (confirmed, date, author_id, group_id, was_id, became_id) VALUES (:confirmed, :date, :author_id, :group_id, :was_id, :became_id)");
-            $statement->execute(['confirmed' => true, 'date' => $replace['date'], 'author_id' => $author_id, 'group_id' => $group_id, 'was_id' => $old_component, 'became_id' => $new_component]);
+            $statement = $this->pdo->prepare("INSERT INTO replacements (confirmed, date, author_id, group_id, group_part, reason, was_id, became_id) VALUES (:confirmed, :date, :author_id, :group_id, :group_part, :reason, :was_id, :became_id)");
+            $statement->execute(['confirmed' => true, 'date' => $replace['date'], 'author_id' => $author_id, 'group_id' => $group_id, 'group_part' => $replace['groupPart'], 'reason' => $replace['reason'], 'was_id' => $old_component, 'became_id' => $new_component]);
             $replacement_id = $this->pdo->lastInsertId();
 
             foreach ($changes as $change_id){

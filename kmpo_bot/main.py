@@ -14,6 +14,7 @@ async def start_http_server():
 	https_site = web.TCPSite(runner, 'localhost', '305')
 	await https_site.start()
 	print("Web-server: OK")
+    
 
 async def main():
     print("Bot: OK")

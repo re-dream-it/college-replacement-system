@@ -303,7 +303,7 @@ table th, table td {
     padding-top: 10px; */
     padding: 12px;
     text-align: center;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 table th {
@@ -402,6 +402,8 @@ table tr:hover td {
 }
 .delete-td{
     background: #fff;
+    padding-right: 0px;
+    padding-left: 5px;
 }
 
 .no_bg{
@@ -445,7 +447,7 @@ form {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -470,7 +472,7 @@ form {
 }
 
 .form-title {
-    margin-top: 50px;
+    margin-top: 20px;
 }
 
 .form-group, .form-group-cb {
@@ -494,7 +496,7 @@ form {
 
 .form-group input, .form-group select {
     
-    padding: 12px; /* Увеличил паддинг для удобства ввода */
+    padding: 9px; /* Увеличил паддинг для удобства ввода */
     border: 1px solid #ddd;
     width: 100%;
     border-radius: 4px;
@@ -820,3 +822,15 @@ form {
 .about-section ul {
     padding-left: 40px; /* Отступ для списка */
 }
+
+
+
+.form-columns, .form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-column, .form-row .form-group{
+    flex: 1;
+}
+
