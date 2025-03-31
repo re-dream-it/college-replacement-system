@@ -28,7 +28,7 @@
             <div class="form-row">
                 <div class="form-group">
                     <label for="reason">Причина:</label>
-                    <input autocomplete="on" type="text" id="reason" name="reason" placeholder="Причина замены" requierd>
+                    <input autocomplete="on" type="text" id="reason" name="reason" placeholder="Причина замены">
                 </div>
             </div>
 

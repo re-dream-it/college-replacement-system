@@ -25,8 +25,12 @@ document.addEventListener('DOMContentLoaded', function () {
     function applyFilters() {
         if (replacementsData.length === 0) {
             const tbody = document.querySelector('table tbody');
-            tbody.innerHTML = '';
-            tbody.innerHTML = `<tr><td colspan="12" style="text-align: center;">Нет данных для отображения</td></tr>`;
+            if (window.location.pathname == '/admin_replacements') {
+                tbody.innerHTML = `<tr><td colspan="13" style="text-align: center;">Нет данных для отображения</td></tr>`;
+            }
+            else if (window.location.pathname == '/replacements') {
+                tbody.innerHTML = `<tr><td colspan="12" style="text-align: center;">Нет данных для отображения</td></tr>`;
+            }
             return;
         }
 
@@ -70,7 +74,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (data.length === 0) {
             // Если данных нет
-            tbody.innerHTML = `<tr><td colspan="12" style="text-align: center;">Нет данных для отображения</td></tr>`;
+            if (window.location.pathname == '/admin_replacements') {
+                tbody.innerHTML = `<tr><td colspan="13" style="text-align: center;">Нет данных для отображения</td></tr>`;
+            }
+            else if (window.location.pathname == '/replacements') {
+                tbody.innerHTML = `<tr><td colspan="12" style="text-align: center;">Нет данных для отображения</td></tr>`;
+            }
             return;
         }
 

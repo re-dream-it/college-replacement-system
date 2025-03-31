@@ -121,6 +121,16 @@ document.addEventListener('DOMContentLoaded', function () {
             const isConfirmedTeacher = confirm(`Преподаватель ${exists['teacher_fullname']} уже занят следующей парой:\n\nДата и время: ${date}, ${exists['slot_id']} пара\nГруппа: ${exists['name']}\nДисциплина: ${exists['discipline_name']}\nКабинет: ${newRoom}\n\nВы уверены, что хотите продолжить и поставить эту замену для группы ${group}?`);
             isValid = isConfirmedTeacher;
         }
+
+        if (!isValid) {return;}
+        const newDiscipline = document.getElementById('newDiscipline').value
+        response = await fetch(`functions/check_replace.php?type=discipline_relation&discipline=${newDiscipline}&group=${group}`);
+        exists = await response.json();
+        console.log(exists)
+        if (!exists) {
+            alert(`Дисциплины "${newDiscipline}" нет в учебной нагрузке группы "${group}".`);
+            isValid = false;
+        }
   
         if (isValid) {
             submitForm();

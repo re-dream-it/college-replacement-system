@@ -140,6 +140,18 @@ class WebDatabase extends DataBase
         return $data;
     }
 
+    // Проверка существования связи дисциплины и группы
+    public function checkDisciplineRelation($group, $discipline){
+        $group_id = $this->getGroupID($group);
+        $discipline_id = $this->getDisciplineID($discipline);
+
+        $statement = $this->pdo->prepare("SELECT COUNT(*) FROM `groups_disciplines`
+                        WHERE group_id = :group_id AND discipline_id = :discipline_id;");
+        $statement->execute(['group_id' => $group_id, 'discipline_id' => $discipline_id]);
+        $data = $statement->fetchColumn();
+        return $data;
+    }
+
     // Проверка существования дисциплины
     public function checkDisciplineValue($table, $query){
         $statement = $this->pdo->prepare("SELECT COUNT(*) FROM `disciplines`
