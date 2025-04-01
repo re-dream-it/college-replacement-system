@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost:3306
--- Время создания: Мар 31 2025 г., 18:07
+-- Время создания: Апр 01 2025 г., 22:24
 -- Версия сервера: 11.4.5-MariaDB-ubu2404
 -- Версия PHP: 8.3.17
 
@@ -360,10 +360,10 @@ ALTER TABLE `groups_disciplines`
 -- Ограничения внешнего ключа таблицы `replacements`
 --
 ALTER TABLE `replacements`
-  ADD CONSTRAINT `replace:became` FOREIGN KEY (`became_id`) REFERENCES `replacement_components` (`id`) ON UPDATE CASCADE,
+  ADD CONSTRAINT `replace:became` FOREIGN KEY (`became_id`) REFERENCES `replacement_components` (`id`) ON UPDATE NO ACTION,
   ADD CONSTRAINT `replace:employee` FOREIGN KEY (`author_id`) REFERENCES `employes` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `replace:group` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON UPDATE CASCADE,
-  ADD CONSTRAINT `replace:was` FOREIGN KEY (`was_id`) REFERENCES `replacement_components` (`id`) ON UPDATE CASCADE;
+  ADD CONSTRAINT `replace:was` FOREIGN KEY (`was_id`) REFERENCES `replacement_components` (`id`) ON UPDATE NO ACTION;
 
 --
 -- Ограничения внешнего ключа таблицы `replacement_components`
