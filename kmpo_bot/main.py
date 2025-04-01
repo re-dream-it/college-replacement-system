@@ -8,13 +8,13 @@ async def start_http_server():
 	app = web.Application()
 	app.router.add_post('/replace_notify', handlers.accept_replace)
 	app.router.add_post('/replace_delete', handlers.delete_replace)
+	app.router.add_post('/edit_replace_notify', handlers.accept_edit_replace)
 	runner = web.AppRunner(app)
 	await runner.setup()
      
 	https_site = web.TCPSite(runner, 'localhost', '305')
 	await https_site.start()
 	print("Web-server: OK")
-    
 
 async def main():
     print("Bot: OK")

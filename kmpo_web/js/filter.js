@@ -87,12 +87,23 @@ document.addEventListener('DOMContentLoaded', function () {
         data.forEach(replace => {
             const row = document.createElement('tr');
             if (window.location.pathname == '/admin_replacements') {
+                    if (replace.confirmed == 1){
+                        replace.confirmed = "Да"
+                        conf_btn = ``;
+                    }
+                    else{
+                        replace.confirmed = "Нет"
+                        conf_btn = `<button type="button" data-replacement-id="${replace.replacement_id}" class="dropdown-actions-item confirm-btn">
+                                        <i class="fa-solid fa-check"></i> Подтвердить
+                                    </button>`                    
+                    }
                     row.innerHTML = `
                     <td>${replace.replacement_id}</td>
                     <td>${replace.date}</td>
                     <td>${replace.group_name}</td>
                     <td>${replace.replacement_types}</td>
                     <td>${replace.reason}</td>
+                    <td>${replace.confirmed}</td>
                     <td class="was">${replace.was_teacher_fullname}</td>
                     <td class="was">${replace.was_discipline}</td>
                     <td class="was">${replace.was_slot_id}</td>
@@ -101,11 +112,27 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td class="became">${replace.became_discipline}</td>
                     <td class="became">${replace.became_slot_id}</td>
                     <td class="became">${replace.became_cabinet}</td>
-                    <td class="delete-td"><button type="button" data-replacement-id="${replace.replacement_id}" class="delete-btn"><i class="fa-solid fa-trash"></i></button></td>
-                `;
+                    <td class="actions-td">
+                        <div class="dropdown-actions">
+                            <button class="dropdown-actions-toggle" type="button"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                            <div class="dropdown-actions-menu">
+                                ${conf_btn}
+                                <a href="edit_replacement?id=${replace.replacement_id}"><button type="button" data-replacement-id="${replace.replacement_id}" class="dropdown-actions-item edit-btn">
+                                    <i class="fa-solid fa-pen-to-square"></i> Изменить
+                                </button></a>
+                                <button type="button" data-replacement-id="${replace.replacement_id}" class="dropdown-actions-item delete-btn">
+                                    <i class="fa-solid fa-trash"></i> Удалить
+                                </button>
+                                <!-- Дополнительные кнопки можно добавить здесь -->
+                            </div>
+                        </div>
+                    </td>
+                    `;
+                    
             }
             else if (window.location.pathname == '/replacements') {
-                row.innerHTML = `
+                if (replace.confirmed != 0){
+                    row.innerHTML = `
                     <td>${replace.replacement_id}</td>
                     <td>${replace.date}</td>
                     <td>${replace.group_name}</td>
@@ -118,13 +145,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     <td class="became">${replace.became_discipline}</td>
                     <td class="became">${replace.became_slot_id}</td>
                     <td class="became">${replace.became_cabinet}</td>
-                `;
+                    `;
+                }       
             }
             tbody.appendChild(row);
         });
 
-        // Добавляем обработчики для кнопок удаления
+        // Добавляем обработчики для кнопок удаления и подтверждения
         addDeleteHandlers();
+        addConfirmHandlers();
     }
 
     // Функция для добавления обработчиков удаления
@@ -135,6 +164,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 const replacementId = this.getAttribute('data-replacement-id');
                 if (confirm('Вы уверены, что хотите удалить эту замену?')) {
                     await deleteReplacement(replacementId);
+                    loadReplacementsByDate(dateFilter.value); // Перезагружаем данные
+                }
+            });
+        });
+    }
+
+    // Функция для добавления обработчика утверждения
+    function addConfirmHandlers() {
+        const confirmButtons = document.querySelectorAll('.confirm-btn');
+        confirmButtons.forEach(button => {
+            button.addEventListener('click', async function () {
+                const replacementId = this.getAttribute('data-replacement-id');
+                if (confirm('Вы уверены, что хотите утвердить эту замену?')) {
+                    await confirmReplacement(replacementId);
                     loadReplacementsByDate(dateFilter.value); // Перезагружаем данные
                 }
             });
@@ -154,6 +197,50 @@ document.addEventListener('DOMContentLoaded', function () {
             console.error('Ошибка:', error);
         }
     }
+
+    // Функция для удаления замены
+    async function confirmReplacement(replacementId) {
+        try {
+            const response = await fetch(`functions/confirm_replacement.php`, {
+                method: 'POST',
+                body: JSON.stringify({'replacement_id': replacementId}),
+            });
+            if (!response.ok) throw new Error('Ошибка при удалении замены');
+            const result = await response.json();
+            alert(result.message);
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+
+        const toggleBtn = e.target.closest('.dropdown-action-toggle');
+        const clickedDropdown = toggleBtn ? toggleBtn.closest('.dropdown-action') : null;
+        
+        // Закрываем все меню, кроме текущего
+        document.querySelectorAll('.dropdown-actions').forEach(dropdown => {
+            const menu = dropdown.querySelector('.dropdown-actions-menu');
+            if (dropdown !== clickedDropdown && menu.classList.contains('show')) {
+                menu.classList.remove('show');
+            }
+        });
+
+        // Показать/скрыть выпадающее меню
+        if (e.target.closest('.dropdown-actions-toggle')) {
+            const dropdown = e.target.closest('.dropdown-actions');
+            const menu = dropdown.querySelector('.dropdown-actions-menu');
+            menu.classList.toggle('show');
+        }
+        
+        // Скрыть все выпадающие меню при клике вне
+        if (!e.target.closest('.dropdown-actions')) {
+            document.querySelectorAll('.dropdown-actions-menu').forEach(menu => {
+                menu.classList.remove('show');
+            });
+        }
+        
+    });
 
 
 

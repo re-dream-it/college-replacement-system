@@ -25,17 +25,19 @@ if (!($newFilled || $newEmpty)){
     exit;
 }
 
-$replacement_id = $DB->addReplacement($replace, $oldEmpty, $newEmpty, $_SESSION['user_id']);
+$replacement = $DB->editReplacement($replace, $oldEmpty, $newEmpty, $replace['id']);
+$replacement_id = $replacement['id'];
+
 
 if ($replacement_id){
-    if ($replace['confirmed'] === 'true'){
+    if ($replacement['confirmed'] == 1){
         try {
-            $url = "http://localhost:305/replace_notify";
+            $url = "http://localhost:305/edit_replace_notify";
             $data = ['replacement_id' => $replacement_id];
             $response = sendPostRequest($url, $data);
             echo json_encode(['success' => true, 'message' => $replacement_id]);
         } catch (Exception $e) {
-            echo json_encode(['success' => false, 'message' => 'Замена была добавлена, однако не удалось отправить уведомления в Телеграм.']);
+            echo json_encode(['success' => false, 'message' => 'Замена была изменена, однако не удалось отправить уведомления в Телеграм.']);
         }
     }
     else{
@@ -43,5 +45,5 @@ if ($replacement_id){
     }
 }
 else{
-    echo json_encode(['success' => false, 'message' => 'Ошибка добавления замены в БД!']);
+    echo json_encode(['success' => false, 'message' => "Ошибка изменения замены в БД!"]);
 }

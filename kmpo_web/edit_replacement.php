@@ -1,95 +1,104 @@
 <? include "head.php"; ?>
 <? include "header.php"; ?>
+
+
+<?
+$replacement_id = $_GET['id'];
+$replacement = $DB->getReplace($replacement_id);
+?>
+
 <body>
     <!-- Основной контент -->
     <main>
-        <h1>Редактирование замены [Under Maintenance]</h1>
+        <h1>Изменение замены №<?=$replacement_id?></h1>
 
-        <!-- Форма для редактирования замены -->
-        <form id="editReplacementForm">
-            <div class="form-group">
-                <label for="editDate"><b>ID замены:</b> 21</label>
+        <!-- Форма для изменения замены -->
+        <form id="replacementForm">
+            <!-- Основные сведения -->
+            <div class="form-group form-title"><b>Общие сведения:</b></div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="date">Дата:</label>
+                    <input autocomplete="off" type="date" id="date" name="date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="group">Группа:</label>
+                    <input autocomplete="off" type="text" id="group" name="group" placeholder="Например: 201-СА-23" value="<?=$replacement['group_name']?>" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="groupPart">Подгруппа:</label>
+                    <input autocomplete="on" type="text" id="groupPart" name="groupPart" placeholder="Заполнить при необходимости" value="<?=$replacement['group_part']?>">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="editDate">Дата:</label>
-                <input type="date" id="editDate" name="date" value="2025-03-12" required>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="reason">Причина:</label>
+                    <input autocomplete="on" type="text" id="reason" name="reason" placeholder="Причина замены" value="<?=$replacement['reason']?>">
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="editGroup">Группа:</label>
-                <input type="text" id="editGroup" name="group" value="101-СА-23" placeholder="Например: 201-СА-23" required>
-            </div>
+            <div class="form-columns">
+                <!-- Левая колонка - Было -->
+                <div class="form-column">
+                    <div class="form-group form-title"><b>Было:</b></div>
 
-            <div class="form-group-cb">
-                <label for="editType">Тип замены:</label>
-                <div class="dropdown-checkbox">
-                    <button type="button" class="dropdown-toggle">Выберите типы замен</button>
-                    <div class="dropdown-content">
-                        <label><input class="cb" type="checkbox" name="type" value="teacher"> Замена преподавателя</label>
-                        <label><input class="cb" type="checkbox" name="type" value="discipline"> Замена дисциплины</label>
-                        <label><input class="cb" type="checkbox" name="type" value="cancel"> Отмена занятия</label>
-                        <label><input class="cb" type="checkbox" name="type" value="remote"> Замена на дистанционный формат</label>
+                    <div class="form-group">
+                        <label for="oldTeacher">Преподаватель:</label>
+                        <input autocomplete="off" type="text" id="oldTeacher" name="oldTeacher" placeholder="Например: Иванов И.И." value="<?=$replacement['was_teacher_fullname']?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="oldDiscipline">Дисциплина:</label>
+                        <input autocomplete="off" type="text" id="oldDiscipline" name="oldDiscipline" placeholder="Например: СО.02.01 Математика" value="<?=$replacement['was_discipline']?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="oldPair">Номер пары:</label>
+                        <input autocomplete="off" type="number" id="oldPair" name="oldPair" placeholder="Например: 2" value="<?=$replacement['was_slot_id']?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="oldRoom">Кабинет:</label>
+                        <input autocomplete="off" type="text" id="oldRoom" name="oldRoom" placeholder="Например: 412" value="<?=$replacement['was_cabinet']?>">
+                    </div>
+                </div>
+
+                <!-- Правая колонка - Стало -->
+                <div class="form-column">
+                    <div class="form-group form-title"><b>Стало:</b></div>
+
+                    <div class="form-group">
+                        <label for="newTeacher">Преподаватель:</label>
+                        <input autocomplete="off" type="text" id="newTeacher" name="newTeacher" placeholder="Например: Петров П.П." value="<?=$replacement['became_teacher_fullname']?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newDiscipline">Дисциплина:</label>
+                        <input autocomplete="off" type="text" id="newDiscipline" name="newDiscipline" placeholder="Например: СО.01.04 История России (общ)"  value="<?=$replacement['became_discipline']?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newPair">Номер пары:</label>
+                        <input autocomplete="off" type="number" id="newPair" name="newPair" placeholder="Например: 2" value="<?=$replacement['became_slot_id']?>">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="newRoom">Кабинет:</label>
+                        <input autocomplete="off" type="text" id="newRoom" name="newRoom" placeholder="Например: 412" value="<?=$replacement['became_cabinet']?>">
                     </div>
                 </div>
             </div>
 
-            <div class="form-group form-title"><b>Было:</b></div>
+
 
             <div class="form-group">
-                <label for="editOldTeacher">Преподаватель:</label>
-                <input type="text" id="editOldTeacher" name="oldTeacher" value="Малькова Т.А." placeholder="Например: Иванов И.И." required>
+                <button type="submit" class="submit-btn">Изменить замену</button>
             </div>
-
-            <div class="form-group">
-                <label for="editOldDiscipline">Дисциплина:</label>
-                <input type="text" id="editOldDiscipline" name="oldDiscipline" value="СО.02.01 Математика" placeholder="Например: СО.02.01 Математика" required>
-            </div>
-
-            <div class="form-group">
-                <label for="editOldPair">Номер пары:</label>
-                <input type="number" id="editOldPair" name="oldPair" value="2" placeholder="Например: 2" required>
-            </div>
-
-            <div class="form-group">
-                <label for="editOldRoom">Кабинет:</label>
-                <input type="text" id="editOldRoom" name="oldRoom" value="412" placeholder="Например: 412" required>
-            </div>
-
-            <div class="form-group form-title"><b>Стало:</b></div>
-
-            <div class="form-group">
-                <label for="editNewTeacher">Преподаватель:</label>
-                <input type="text" id="editNewTeacher" name="newTeacher" value="Пяткина М.А." placeholder="Например: Петров П.П.">
-            </div>
-
-            <div class="form-group">
-                <label for="editNewDiscipline">Дисциплина:</label>
-                <input type="text" id="editNewDiscipline" name="newDiscipline" value="СО.01.04 История России (общ)" placeholder="Например: СО.01.04 История России (общ)">
-            </div>
-
-            <div class="form-group">
-                <label for="editNewPair">Номер пары:</label>
-                <input type="number" id="editNewPair" name="newPair" value="2" placeholder="Например: 2">
-            </div>
-
-            <div class="form-group">
-                <label for="editNewRoom">Кабинет:</label>
-                <input type="text" id="editNewRoom" name="newRoom" value="412" placeholder="Например: 412">
-            </div>
-            
-            <div class="form-group-cb">
-                <label>Согласовано: <input class="cb" type="checkbox" name="type" value="confirmed"></label>
-            </div>
-
-            <div class="form-group">
-                <button type="submit" class="submit-btn">Сохранить изменения</button>
-            </div>
-
-            <div class="form-group">
-                <button type="submit" class="submit-btn">Удалить замену</button>
-            </div>
-
         </form>
     </main>
 </body>
 <? include "footer.php"; ?>
+
+<script src="js/edit_replace.js"></script>

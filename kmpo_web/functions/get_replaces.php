@@ -13,10 +13,10 @@ $replaces = $DB->getReplaces($date);
 
 session_start();
 if (!isset($_SESSION['user_id'])) {
-    $i = 0;
-    foreach ($replaces as $replace){
-        unset($replaces[$i]['reason']);
-    }
+    $replaces = $DB->getReplaces($date);
+}
+else{
+    $replaces = $DB->getReplacesAdmin($date);
 }
 
 // Возвращаем данные в формате JSON

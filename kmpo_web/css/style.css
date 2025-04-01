@@ -370,9 +370,9 @@ table tr:hover td.became {
     background-color: #99ff99; /* Затемнение при наведении для .became */
 }
 
-table tr:hover td.delete-td {
+table tr:hover td.delete-td{
     transition: 0.3s;
-    background-color: #ffffff; /* Затемнение при наведении для .became */
+    background-color: #ffffff; /* Затемнение при наведении для .delete-td */
 }
 
 /* Затемнение при наведении на строку для всех ячеек */
@@ -385,8 +385,8 @@ table tr:hover td {
     background-color: #d5d5d5;
 } */
 
-/* Кнопка редактирования */
-.delete-btn {
+/* Кнопка удаления */
+.delete-btn, .confirm-btn, .edit-btn {
     background: none;
     border: none;
     color: #B90039;
@@ -397,8 +397,9 @@ table tr:hover td {
 
 
 
-.delete-btn:hover {
+.delete-btn:hover, .confirm-btn:hover, .edit-btn:hover {
     color: #A00030;
+    border-radius: 4px;
 }
 .delete-td{
     background: #fff;
@@ -834,3 +835,70 @@ form {
     flex: 1;
 }
 
+.actions-td {
+    position: relative;
+    background-color: #ffffff; 
+    padding: 3px;
+}
+
+table tr:hover td.actions-td{
+    transition: 0.3s;
+    background-color: #ffffff; 
+}
+.dropdown-actions {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-actions-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: 1.2em;
+    color: #333;
+}
+
+.dropdown-actions-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 4px;
+}
+
+
+.dropdown-actions-menu a{
+    text-decoration: none;
+}
+
+
+.dropdown-actions-menu.show {
+    display: block;
+}
+
+.dropdown-actions-item {
+    width: 100%;
+    text-align: left;
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Montserrat';
+    font-size: 12px;
+}
+
+.dropdown-actions-item:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown-actions-item i {
+    width: 20px;
+    text-align: center;
+}

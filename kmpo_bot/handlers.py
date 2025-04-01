@@ -59,6 +59,26 @@ async def replacement_text(replacement):
 <b>Кабинет:</b> <code>{replacement['became_cabinet']}</code>"""
     return text
 
+async def edit_replacement_text(replacement):
+    text = f"""✏️ <b>Замена была изменена!</b>
+<b>ID:</b> <code>{replacement['replacement_id']}</code>
+<b>Изменения:</b> <code>{replacement['replacement_types']}</code>
+<b>Группа:</b> <code>{replacement['group_name']}</code>
+<b>Дата:</b> <code>{replacement['date']}</code>\n"""
+    if not 'Добавление пары' in replacement['replacement_types']:
+        text += f"""\n<b>✖️ Было</b>:
+<b>Преподаватель:</b> <code>{replacement['was_teacher_fullname']}</code>
+<b>Дисциплина:</b> <code>{replacement['was_discipline']}</code>
+<b>Номер пары:</b> <code>{replacement['was_slot_id']}</code>
+<b>Кабинет:</b> <code>{replacement['was_cabinet']}</code>\n"""
+    if not 'Отмена пары' in replacement['replacement_types']:
+        text += f"""\n<b>✔️ Стало</b>:
+<b>Преподаватель:</b> <code>{replacement['became_teacher_fullname']}</code>
+<b>Дисциплина:</b> <code>{replacement['became_discipline']}</code>
+<b>Номер пары:</b> <code>{replacement['became_slot_id']}</code>
+<b>Кабинет:</b> <code>{replacement['became_cabinet']}</code>"""
+    return text
+
 
 
 # start
@@ -169,6 +189,41 @@ async def send_notifications_background(data):
 
     await bot.send_message(LOG_CHAN, f'Рассылка замены №{replacement['replacement_id']} окончена!\nОтправлено сообщений: {i}')
 
+# Обрабатываем запрос на добавление замены, создаем задачу
+async def accept_edit_replace(request):
+    data = await request.json()
+    print(f'Got edited replacement!\nID: {data['replacement_id']}')
+    response = web.json_response({"status": "success", "message": "Рассылка начата"})
+    asyncio.create_task(send_edit_notifications_background(data))
+    return response
+
+# Рассылка замен
+async def send_edit_notifications_background(data):
+    replacement = await db.get_replace(data['replacement_id'])
+    text = await edit_replacement_text(replacement)
+    print('Sending notifications:')
+    print(text)
+    await bot.send_message(INFO_CHAN, text, parse_mode='html', reply_markup=await keyboards.site_keyboard())
+    await bot.send_message(LOG_CHAN, f'Рассылка замены №{replacement['replacement_id']} начата!')
+
+    i = 0
+    users = await db.get_notify_users(replacement['group_id'], replacement['was_teacher_id'], replacement['became_teacher_id'])
+    for user in users:
+        try: 
+            i+=1
+            await bot.send_message(user['id'], text, parse_mode='html', reply_markup=await keyboards.site_keyboard())
+            await asyncio.sleep(1.2)
+        except Exception as e:
+            print(e)
+            if 'bot was blocked by the user' in str(e):
+                await db.delete_user(user['id'])
+                print(f'Пользователь {user['id']} заблокировал бота и был удален из БД!')
+            else:
+                await bot.send_message(LOG_CHAN, f'Ошибка в процессе рассылки №{replacement['replacement_id']}: <code>{str(e)}</code>', parse_mode='html')
+
+    await bot.send_message(LOG_CHAN, f'Рассылка замены №{replacement['replacement_id']} окончена!\nОтправлено сообщений: {i}')
+
+
 # Обрабатываем запрос на удаление замены, создаем задачу
 async def delete_replace(request):
     data = await request.json()
@@ -178,7 +233,7 @@ async def delete_replace(request):
     asyncio.create_task(send_del_notifications_background(replacement))
     return response
 
-# Рассылка замен
+# Рассылка удаления замен
 async def send_del_notifications_background(replacement):
     text = f"⚠️ Замена №{replacement['replacement_id']} была удалена и проводиться не будет!"
     print('Sending notifications:')

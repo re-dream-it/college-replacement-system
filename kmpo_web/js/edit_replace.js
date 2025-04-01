@@ -99,6 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const newPair = document.getElementById('newPair').value
         const group = document.getElementById('group').value
+        const rep_id = new URLSearchParams(window.location.search).get("id");
 
         // Проверка занятости кабинета.
         if (!isValid) {return;}
@@ -106,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let response = await fetch(`functions/check_replace.php?type=room&value=${newRoom}&date=${date}&newPair=${newPair}`);
         let exists = await response.json();
         console.log(exists)
-        if (exists) {
+        if (exists && (exists['replacement_id'] != rep_id)) {
             const isConfirmedRoom = confirm(`Кабинет ${newRoom} уже занят следующей парой:\n\nДата и время: ${date}, ${exists['slot_id']} пара\nГруппа: ${exists['name']}\nДисциплина: ${exists['discipline_name']}\nПреподаватель: ${exists['teacher_fullname']}\n\nВы уверены, что хотите продолжить и поставить эту замену для группы ${group}?`);
             isValid = isConfirmedRoom;
         }
@@ -117,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
         response = await fetch(`functions/check_replace.php?type=teacher&value=${newTeacher}&date=${date}&newPair=${newPair}`);
         exists = await response.json();
         console.log(exists)
-        if (exists) {
+        if (exists && (exists['replacement_id'] != rep_id)) {
             const isConfirmedTeacher = confirm(`Преподаватель ${exists['teacher_fullname']} уже занят следующей парой:\n\nДата и время: ${date}, ${exists['slot_id']} пара\nГруппа: ${exists['name']}\nДисциплина: ${exists['discipline_name']}\nКабинет: ${newRoom}\n\nВы уверены, что хотите продолжить и поставить эту замену для группы ${group}?`);
             isValid = isConfirmedTeacher;
         }
@@ -141,12 +142,11 @@ document.addEventListener('DOMContentLoaded', function () {
     async function submitForm() {
         const formData = new FormData(form);
 
-        const confirmed = document.getElementById('confirmed').checked
-        console.log(confirmed);
-        formData.append('confirmed', confirmed);
+        const rep_id = new URLSearchParams(window.location.search).get("id");
+        formData.append('id', rep_id);
 
         try {
-            const response = await fetch('functions/save_replacement.php', {
+            const response = await fetch('functions/edit_replacement.php', {
                 method: 'POST',
                 body: formData,
             });
@@ -155,14 +155,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const result = await response.json();
 
             if (result.success) {
-                alert('Замена успешно добавлена!');
-                form.reset();
-                const dateField = document.getElementById('date')
-                const today = new Date();
-                const tomorrow = new Date(today);
-                tomorrow.setDate(today.getDate() + 1);
-                const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
-                dateField.value = tomorrowFormatted; 
+                alert('Замена успешно изменена!');
             } else {
                 alert('Ошибка: ' + result.message);
             }
