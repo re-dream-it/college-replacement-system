@@ -4,6 +4,7 @@ require_once 'check_auth.php';
 
 $field = $_GET['field'] ?? '';
 $query = $_GET['query'] ?? '';
+$group = $_GET['group'] ?? '';
 
 if (empty($field) || empty($query)) {
     echo json_encode([]);
@@ -36,7 +37,7 @@ if ($field === 'oldTeacher' || $field === 'newTeacher') {
     $results = $DB->getNameFields($table, $fieldName, $query);
 }
 elseif ($field === 'oldDiscipline' || $field === 'newDiscipline') {
-    $results = $DB->getDisciplineFields($table, $fieldName, $query);
+    $results = $DB->getDisciplineFields($table, $fieldName, $query, $group);
 }
 elseif ($field === 'group') {
     $results = $DB->getGroupFields($table, $fieldName, $query);

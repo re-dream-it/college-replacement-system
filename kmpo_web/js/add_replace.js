@@ -30,9 +30,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             try {
-                const response = await fetch(`functions/get_suggestions.php?field=${fieldId}&query=${query}`);
+                let response;
+                if (fieldId === 'oldDiscipline' || fieldId === 'newDiscipline') {
+                    const group = document.getElementById('group').value;
+                    response = await fetch(`functions/get_suggestions.php?field=${fieldId}&query=${query}&group=${group}`);
+                } else{
+                    response = await fetch(`functions/get_suggestions.php?field=${fieldId}&query=${query}`);
+                }
+                
                 if (!response.ok) throw new Error('Ошибка при загрузке данных');
-                const data = await response.json();
+                const data = await response.json(); 
 
                 dropdown.innerHTML = '';
                 data.forEach(item => {

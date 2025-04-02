@@ -205,13 +205,13 @@ class WebDatabase extends DataBase
         return $data;
     }
 
-    // Подсказки дисциплин
-    public function getDisciplineFields($table, $fieldName, $query){
+    // Подсказки дисциплин со проверкой связи с группой
+    public function getDisciplineFields($table, $fieldName, $query, $group){
+        $group_id = $this->getGroupID($group);
         $statement = $this->pdo->prepare("SELECT DISTINCT $fieldName FROM `disciplines`
-                        WHERE name LIKE :query
-                        OR code LIKE :query
-                        LIMIT 10;");
-         $statement->execute(['query' => "%$query%"]);
+                        WHERE (code LIKE :query OR name LIKE :query) AND id IN (
+                            SELECT discipline_id FROM groups_disciplines WHERE group_id = :group_id) LIMIT 10;");
+        $statement->execute(['query' => "%$query%", 'group_id' => $group_id]);
         $data = $statement->fetchAll();
         foreach ($data as $key => $value) {
             $data[$key] = implode(' ', $value);
