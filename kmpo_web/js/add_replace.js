@@ -122,16 +122,32 @@ document.addEventListener('DOMContentLoaded', function () {
             isValid = isConfirmedTeacher;
         }
 
+        // Проверка связи дисциплины и группы поля "Было".
+        if (!isValid) {return;}
+        const oldDiscipline = document.getElementById('oldDiscipline').value
+        if(oldDiscipline != '') {
+            response = await fetch(`functions/check_replace.php?type=discipline_relation&discipline=${oldDiscipline}&group=${group}`);
+            exists = await response.json();
+            console.log(exists)
+            if (!exists) {
+                alert(`[Было] Дисциплины "${oldDiscipline}" нет в учебной нагрузке группы "${group}".`);
+                isValid = false;
+            }
+        }
+
+        // Проверка связи дисциплины и группы поля "Стало".
         if (!isValid) {return;}
         const newDiscipline = document.getElementById('newDiscipline').value
-        response = await fetch(`functions/check_replace.php?type=discipline_relation&discipline=${newDiscipline}&group=${group}`);
-        exists = await response.json();
-        console.log(exists)
-        if (!exists) {
-            alert(`Дисциплины "${newDiscipline}" нет в учебной нагрузке группы "${group}".`);
-            isValid = false;
+        if(newDiscipline != '') {
+            response = await fetch(`functions/check_replace.php?type=discipline_relation&discipline=${newDiscipline}&group=${group}`);
+            exists = await response.json();
+            console.log(exists)
+            if (!exists) {
+                alert(`[Стало] Дисциплины "${newDiscipline}" нет в учебной нагрузке группы "${group}".`);
+                isValid = false;
+            }
         }
-  
+
         if (isValid) {
             submitForm();
         }
