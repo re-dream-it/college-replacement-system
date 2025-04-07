@@ -59,23 +59,14 @@ document.getElementById('exportExcel').addEventListener('click', function() {
     }
     
     XLSX.utils.book_append_sheet(wb, ws, "Замены");
-    XLSX.writeFile(wb, "Замены.xlsx");
+    const dateFilter = document.getElementById('dateFilter').value;
+    XLSX.writeFile(wb, `Замены ${dateFilter || 'все'}.xlsx`);
 });
 
 document.getElementById('exportPDF').addEventListener('click', function() {
-    // Динамическая загрузка библиотек
-    const script1 = document.createElement('script');
-    script1.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-    const script2 = document.createElement('script');
-    script2.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js';
+
     
-    document.head.appendChild(script1);
-    document.head.appendChild(script2);
-    
-    Promise.all([
-        new Promise(resolve => script1.onload = resolve),
-        new Promise(resolve => script2.onload = resolve)
-    ]).then(() => {
+    Promise.all([]).then(() => {
         const { jsPDF } = window.jspdf;
         const pdf = new jsPDF('l', 'mm', 'a4');
 
@@ -108,7 +99,7 @@ document.getElementById('exportPDF').addEventListener('click', function() {
         // Дата документа
         const dateFilter = document.getElementById('dateFilter').value;
         if (dateFilter) {
-            pdf.setFontSize(12);
+            pdf.setFontSize(10);
             pdf.text(`Дата: ${dateFilter}`, 15, currentY + 5);
             currentY += 15;
         }

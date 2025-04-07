@@ -13,5 +13,10 @@ $DB = new WebDatabase($DB_HOST, $DB_USERNAME, $DB_PASSWORD, $DB_NAME);
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
     <!-- Excel -->
-    <script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/xlsx@0.19.3/dist/xlsx.full.min.js"></script> -->
+    <script src="js/lib/xlsx.min.lib.js"></script>
+    <script src="js/lib/jspdf.min.lib.js"></script>
+    <script src="js/lib/jspdf.plugin.autotable.min.js"></script>
+
+
 </head>
