@@ -104,7 +104,7 @@ async def execute_command(message: types.Message, state: FSMContext):
 @dp.message(F.text == ('ℹ️ Помощь'))
 async def execute_command(message: types.Message, state: FSMContext):
     await state.clear()
-    await bot.send_message(message.from_user.id, f'<b>Возникла проблема?\nРазработчик:</b> @re_dream', parse_mode='html')
+    await bot.send_message(message.from_user.id, f"<b>Возникла проблема?\nРазработчик:</b> @re_dream", parse_mode='html')
 
 # back
 @dp.callback_query(lambda call: call.data == "back")
@@ -131,13 +131,13 @@ async def subscribe_teacher(callback_query: types.CallbackQuery, state: FSMConte
 async def group_entered(message: types.Message, state: FSMContext):
     group = await db.get_group_byname(message.text)
     if group:
-        await bot.send_message(LOG_CHAN, f'✅ Пользователь @{message.from_user.username} успешно подписался на {message.text}!')
+        await bot.send_message(LOG_CHAN, f"✅ Пользователь @{message.from_user.username} успешно подписался на {message.text}!")
     
         await db.update_group(message.from_user.id, group['id'])
         await state.clear()
         await bot.send_message(message.from_user.id, f"✅ *Вы успешно подписались на группу* `{message.text}`.", parse_mode='markdown')
     else:
-        await bot.send_message(LOG_CHAN, f'❌ Пользователь @{message.from_user.username} не смог подписаться на {message.text}!')
+        await bot.send_message(LOG_CHAN, f"❌ Пользователь @{message.from_user.username} не смог подписаться на {message.text}!")
         await bot.send_message(message.from_user.id, f"❌ *Группы* `{message.text}` *не существует.*\nПовторите ввод.", parse_mode='markdown')
 
 # teacher_entered
@@ -145,20 +145,20 @@ async def group_entered(message: types.Message, state: FSMContext):
 async def teacher_entered(message: types.Message, state: FSMContext):
     teacher = await db.get_teacher_byname(message.text)
     if teacher:
-        await bot.send_message(LOG_CHAN, f'✅ Пользователь @{message.from_user.username} успешно подписался на {message.text}!')
+        await bot.send_message(LOG_CHAN, f"✅ Пользователь @{message.from_user.username} успешно подписался на {message.text}!")
 
         await db.update_teacher(message.from_user.id, teacher['id'])
         await state.clear()
         await bot.send_message(message.from_user.id, f"✅ *Вы успешно подписались на преподавателя* `{message.text}`.", parse_mode='markdown')
     else:
-        await bot.send_message(LOG_CHAN, f'❌ Пользователь @{message.from_user.username} не смог подписаться на {message.text}!')
+        await bot.send_message(LOG_CHAN, f"❌ Пользователь @{message.from_user.username} не смог подписаться на {message.text}!")
         
         await bot.send_message(message.from_user.id, f"❌ *Преподавателя* `{message.text}` *не существует.*\nПовторите ввод.", parse_mode='markdown')
 
 # Обрабатываем запрос на добавление замены, создаем задачу
 async def accept_replace(request):
     data = await request.json()
-    print(f'Got new replacement!\nID: {data['replacement_id']}')
+    print(f"Got new replacement!\nID: {data['replacement_id']}")
     response = web.json_response({"status": "success", "message": "Рассылка начата"})
     asyncio.create_task(send_notifications_background(data))
     return response
@@ -170,7 +170,7 @@ async def send_notifications_background(data):
     print('Sending notifications:')
     print(text)
     await bot.send_message(INFO_CHAN, text, parse_mode='html', reply_markup=await keyboards.site_keyboard())
-    await bot.send_message(LOG_CHAN, f'Рассылка замены №{replacement['replacement_id']} начата!')
+    await bot.send_message(LOG_CHAN, f"Рассылка замены №{replacement['replacement_id']} начата!")
 
     i = 0
     users = await db.get_notify_users(replacement['group_id'], replacement['was_teacher_id'], replacement['became_teacher_id'])
@@ -183,16 +183,16 @@ async def send_notifications_background(data):
             print(e)
             if 'bot was blocked by the user' in str(e):
                 await db.delete_user(user['id'])
-                print(f'Пользователь {user['id']} заблокировал бота и был удален из БД!')
+                print(f"Пользователь {user['id']} заблокировал бота и был удален из БД!")
             else:
-                await bot.send_message(LOG_CHAN, f'Ошибка в процессе рассылки №{replacement['replacement_id']}: <code>{str(e)}</code>', parse_mode='html')
+                await bot.send_message(LOG_CHAN, f"Ошибка в процессе рассылки №{replacement['replacement_id']}: <code>{str(e)}</code>", parse_mode='html')
 
-    await bot.send_message(LOG_CHAN, f'Рассылка замены №{replacement['replacement_id']} окончена!\nОтправлено сообщений: {i}')
+    await bot.send_message(LOG_CHAN, f"Рассылка замены №{replacement['replacement_id']} окончена!\nОтправлено сообщений: {i}")
 
 # Обрабатываем запрос на добавление замены, создаем задачу
 async def accept_edit_replace(request):
     data = await request.json()
-    print(f'Got edited replacement!\nID: {data['replacement_id']}')
+    print(f"Got edited replacement!\nID: {data['replacement_id']}")
     response = web.json_response({"status": "success", "message": "Рассылка начата"})
     asyncio.create_task(send_edit_notifications_background(data))
     return response
@@ -204,7 +204,7 @@ async def send_edit_notifications_background(data):
     print('Sending notifications:')
     print(text)
     await bot.send_message(INFO_CHAN, text, parse_mode='html', reply_markup=await keyboards.site_keyboard())
-    await bot.send_message(LOG_CHAN, f'Рассылка замены №{replacement['replacement_id']} начата!')
+    await bot.send_message(LOG_CHAN, f"Рассылка замены №{replacement['replacement_id']} начата!")
 
     i = 0
     users = await db.get_notify_users(replacement['group_id'], replacement['was_teacher_id'], replacement['became_teacher_id'])
@@ -217,17 +217,17 @@ async def send_edit_notifications_background(data):
             print(e)
             if 'bot was blocked by the user' in str(e):
                 await db.delete_user(user['id'])
-                print(f'Пользователь {user['id']} заблокировал бота и был удален из БД!')
+                print(f"Пользователь {user['id']} заблокировал бота и был удален из БД!")
             else:
-                await bot.send_message(LOG_CHAN, f'Ошибка в процессе рассылки №{replacement['replacement_id']}: <code>{str(e)}</code>', parse_mode='html')
+                await bot.send_message(LOG_CHAN, f"Ошибка в процессе рассылки №{replacement['replacement_id']}: <code>{str(e)}</code>", parse_mode='html')
 
-    await bot.send_message(LOG_CHAN, f'Рассылка замены №{replacement['replacement_id']} окончена!\nОтправлено сообщений: {i}')
+    await bot.send_message(LOG_CHAN, f"Рассылка замены №{replacement['replacement_id']} окончена!\nОтправлено сообщений: {i}")
 
 
 # Обрабатываем запрос на удаление замены, создаем задачу
 async def delete_replace(request):
     data = await request.json()
-    print(f'Replacement deleted!\nID: {data['replacement_id']}')
+    print(f"Replacement deleted!\nID: {data['replacement_id']}")
     response = web.json_response({"status": "success", "message": "Рассылка начата"})
     replacement = await db.get_replace(data['replacement_id'])
     asyncio.create_task(send_del_notifications_background(replacement))
@@ -239,7 +239,7 @@ async def send_del_notifications_background(replacement):
     print('Sending notifications:')
     print(text)
     await bot.send_message(INFO_CHAN, text, parse_mode='html', reply_markup=await keyboards.site_keyboard())
-    await bot.send_message(LOG_CHAN, f'Рассылка удаления замены №{replacement['replacement_id']} начата!')
+    await bot.send_message(LOG_CHAN, f"Рассылка удаления замены №{replacement['replacement_id']} начата!")
 
     i = 0
     users = await db.get_notify_users(replacement['group_id'], replacement['was_teacher_id'], replacement['became_teacher_id'])
@@ -252,8 +252,8 @@ async def send_del_notifications_background(replacement):
             print(e)
             if 'bot was blocked by the user' in str(e):
                 db.delete_user(user['id'])
-                print(f'Пользователь {user['id']} заблокировал бота и был удален из БД!')
+                print(f"Пользователь {user['id']} заблокировал бота и был удален из БД!")
             else:
-                await bot.send_message(LOG_CHAN, f'Ошибка в процессе рассылки удаления замены №{replacement['replacement_id']}: <code>{str(e)}</code>\nUID: {user['id']}', parse_mode='html')
+                await bot.send_message(LOG_CHAN, f"Ошибка в процессе рассылки удаления замены №{replacement['replacement_id']}: <code>{str(e)}</code>\nUID: {user['id']}", parse_mode='html')
 
-    await bot.send_message(LOG_CHAN, f'Рассылка удаления замены №{replacement['replacement_id']} окончена!\nОтправлено сообщений: {i}')
+    await bot.send_message(LOG_CHAN, f"Рассылка удаления замены №{replacement['replacement_id']} окончена!\nОтправлено сообщений: {i}")
