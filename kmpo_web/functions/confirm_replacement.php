@@ -13,7 +13,7 @@ if ($replacement_id){
     $DB->confirmReplacement($replacement_id);
 
     try {
-        $url = "http://localhost:305/replace_notify";
+        $url = "http://localhost:4310/replace_notify";
         $data = ['replacement_id' => $replacement_id];
         $response = sendPostRequest($url, $data);
         echo json_encode(['success' => true, 'message' => "Замена №$replacement_id была утверждена!"]);

@@ -30,7 +30,7 @@ $replacement_id = $DB->addReplacement($replace, $oldEmpty, $newEmpty, $_SESSION[
 if ($replacement_id){
     if ($replace['confirmed'] === 'true'){
         try {
-            $url = "http://localhost:305/replace_notify";
+            $url = "http://localhost:4310/replace_notify";
             $data = ['replacement_id' => $replacement_id];
             $response = sendPostRequest($url, $data);
             echo json_encode(['success' => true, 'message' => $replacement_id]);

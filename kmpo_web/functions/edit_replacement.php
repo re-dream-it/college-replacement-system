@@ -32,7 +32,7 @@ $replacement_id = $replacement['id'];
 if ($replacement_id){
     if ($replacement['confirmed'] == 1){
         try {
-            $url = "http://localhost:305/edit_replace_notify";
+            $url = "http://localhost:4310/edit_replace_notify";
             $data = ['replacement_id' => $replacement_id];
             $response = sendPostRequest($url, $data);
             echo json_encode(['success' => true, 'message' => $replacement_id]);

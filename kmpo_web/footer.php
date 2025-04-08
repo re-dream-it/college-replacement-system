@@ -1,7 +1,7 @@
 <!-- Футер -->
 <footer>
     <div class="footer-content">
-        <img src="images/logo_bw.png" alt="Логотип колледжа" class="logo">
+        <img src="images/KPA_logo_square_red.svg" alt="Логотип колледжа" class="logo-footer">
         <div class="info-block">
             <p>Разработчик: Шаров Вячеслав Юрьевич</p>
             <p>Контакты: 

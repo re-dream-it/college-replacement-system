@@ -12,7 +12,7 @@ $replacement_id = $_GET['replacement_id'];
 if ($replacement_id){
     if($DB->isConfirmed($replacement_id) == 1){
         try {
-            $url = "http://localhost:305/replace_delete";
+            $url = "http://localhost:4310/replace_delete";
             $data = ['replacement_id' => $replacement_id];
             $response = sendPostRequest($url, $data);
     
