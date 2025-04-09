@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
 }?>
 <header>
     <div class="header-content">
-        <img src="images/kpa_logo.svg" alt="Логотип колледжа" class="logo">
+        <a href="/replacements"><img src="images/KPA_logo_square_white.svg" alt="Логотип колледжа" class="logo"></a>
         <nav>
             <ul>
                 <li><a href="/">Главная</a></li>

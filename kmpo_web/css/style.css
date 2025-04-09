@@ -49,7 +49,8 @@
     /* Таблица */
     table {
         display: block;
-        overflow-x: auto;
+        overflow-x: scroll;
+        scrollbar-color: rgb(123, 123, 130) #fbfbfb;
     }
 
     table th, table td {
@@ -183,7 +184,7 @@ header {
 }
 
 .logo {
-    height: 40px;
+    height: 50px;
 }
 .logo-footer {
     height: 70px;
@@ -495,7 +496,7 @@ form {
     display: block;
     margin-bottom: 8px; /* Увеличил отступ между label и input */
     font-weight: 500;
-    color: #333;
+    color: #B90039;
 }
 
 .form-group input, .form-group select {
@@ -550,11 +551,12 @@ form {
     padding: 10px;
     cursor: pointer;
     font-size: 14px;
-    width: 200px;
+    /* width: 200px; */
     text-align: left;
 }
 
 .dropdown-toggle::after {
+    padding-left: 10px;
     content: "▼";
     float: right;
 }
@@ -567,18 +569,20 @@ form {
     border-radius: 4px;
     padding: 10px;
     z-index: 1;
-    width: 300px;
+    width: 230px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .dropdown-content label {
     display: block;
+    max-width: fit-content;
     margin-bottom: 8px;
     font-size: 14px;
 }
 
 .dropdown-content input[type="checkbox"] {
     margin-right: 8px;
+    max-width: fit-content;
 }
 
 .dropdown-checkbox:hover .dropdown-content {
@@ -698,7 +702,7 @@ form {
 .tg-btn {
     background-color: #ffffff; /* Цвет Telegram */
     color: #008be7; /* Белый текст */
-    padding: 10px 20px; /* Отступы внутри кнопки */
+    padding: 7px 17; /* Отступы внутри кнопки */
     border-radius: 20px; /* Закругленные углы */
     text-decoration: none; /* Убираем подчеркивание */
     font-family: "Montserrat", sans-serif; /* Шрифт */
@@ -757,6 +761,8 @@ form {
     background-color: #fff;
     border: 1px solid #ccc;
     border-top: none;
+    position: absolute;
+    max-width: fit-content;
     max-height: 150px;
     overflow-y: auto;
     z-index: 1000;

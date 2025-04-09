@@ -6,6 +6,7 @@
         <h1>Просмотр замен</h1>
 
         <div class="filters">
+            <input required type="date" id="dateFilter">
             <div class="dropdown-checkbox">
                 <button type="button" class="dropdown-toggle">Тип замены</button>
                 <div class="dropdown-content">
@@ -14,7 +15,6 @@
                     <? endforeach; ?>
                 </div>
             </div>
-            <input required type="date" id="dateFilter">
             <input type="text" id="groupFilter" placeholder="Группа (например: 201-СА-23)">
             <input type="text" id="roomFilter" placeholder="Кабинет (например: К612)">
         </div>
