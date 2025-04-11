@@ -1,17 +1,16 @@
-// Экспортирование таблицы в Excel 
 document.getElementById('exportExcel').addEventListener('click', function() {
     const table = document.querySelector('table');
     const data = [];
     
-    // Добавляем строку с группировкой колонок
+    // Строка группировки колонок
     const groupHeaders = [
-        'Общие сведения', '', '', '', '', '', // 6 объединенных для "Общие сведения"
-        'Было', '', '', '',    // 4 объединенных для "Было"
-        'Стало', '', '', ''    // 4 объединенных для "Стало"
+        'Общие сведения', '', '', '', '', '',
+        'Было', '', '', '',
+        'Стало', '', '', ''
     ];
     data.push(groupHeaders);
     
-    // Заголовки колонок
+    // Заголовки таблицы (вторая строка)
     const headers = [];
     table.querySelectorAll('thead tr:last-child th').forEach(header => {
         if (!header.classList.contains('hidden_tab')) {
@@ -35,26 +34,113 @@ document.getElementById('exportExcel').addEventListener('click', function() {
     const wb = XLSX.utils.book_new();
     const ws = XLSX.utils.aoa_to_sheet(data);
     
-    // Настраиваем ширину колонок
+    // Настройка ширины колонок
     ws['!cols'] = [
-        { wch: 5 },  { wch: 12 }, { wch: 10 }, { wch: 25 },
-        { wch: 20 }, { wch: 8 },  { wch: 20 }, { wch: 20 },
-        { wch: 10 }, { wch: 10 }, { wch: 20 }, { wch: 20 },
-        { wch: 10 }, { wch: 10 }
+        { wch: 5 },   // ID 
+        { wch: 13 },  // Дата
+        { wch: 15 },  // Группа
+        { wch: 20 },  // Тип
+        { wch: 10 },  // Причина
+        { wch: 8 },   // Согл
+        { wch: 20 },   // Препод (было)
+        { wch: 25 },  // Дисциплина (было)
+        { wch: 10 },   // Номер пары (было)
+        { wch: 8 },   // Номер Кабинета (было)
+        { wch: 20 },  // Препод (стало)
+        { wch: 25 },   // Дисциплина (стало)
+        { wch: 10 },   // Номер пары (стало)
+        { wch: 8 }   // Номер Кабинета (стало)
     ];
     
-    // Добавляем автофильтр
-    ws['!autofilter'] = { ref: XLSX.utils.encode_range({ s: {r:1,c:0}, e: {r:data.length,c:headers.length-1} }) };
+    // Объединение ячеек
+    ws['!merges'] = [
+        { s: { r: 0, c: 0 }, e: { r: 0, c: 5 } }, // Общие сведения
+        { s: { r: 0, c: 6 }, e: { r: 0, c: 9 } }, // Было
+        { s: { r: 0, c: 10 }, e: { r: 0, c: 13 } } // Стало
+    ];
     
-    // Включаем перенос текста для всех ячеек
+    // Стили для заголовков
+    const centerStyle = { alignment: { horizontal: 'center', vertical: 'center' } };
+    const grayStyle = {
+        fill: { patternType: "solid", fgColor: { rgb: "D3D3D3" } },
+        font: { bold: true },
+        alignment: { horizontal: 'center', vertical: 'center' }
+    };
+    const redHeaderStyle = {
+        fill: { patternType: "solid", fgColor: { rgb: "FFC7CE" } },
+        font: { bold: true, color: { rgb: "9C0006" } },
+        alignment: { horizontal: 'center', vertical: 'center' }
+    };
+    const greenHeaderStyle = {
+        fill: { patternType: "solid", fgColor: { rgb: "C6EFCE" } },
+        font: { bold: true, color: { rgb: "006100" } },
+        alignment: { horizontal: 'center', vertical: 'center' }
+    };
+    
+    // Стили для данных
     const wrapStyle = { alignment: { wrapText: true } };
-    for (let r = 0; r < data.length; r++) {
+    const centerAlign = { alignment: { horizontal: 'center' } };
+    const redDataStyle1 = {
+        fill: { patternType: "solid", fgColor: { rgb: "FFEBEE" } }
+    };
+    const redDataStyle2 = {
+        fill: { patternType: "solid", fgColor: { rgb: "FFCDD2" } }
+    };
+    const greenDataStyle1 = {
+        fill: { patternType: "solid", fgColor: { rgb: "E8F5E9" } }
+    };
+    const greenDataStyle2 = {
+        fill: { patternType: "solid", fgColor: { rgb: "C8E6C9" } }
+    };
+    const grayDataStyle1 = {
+        fill: { patternType: "solid", fgColor: { rgb: "FAFAFA" } }
+    };
+    const grayDataStyle2 = {
+        fill: { patternType: "solid", fgColor: { rgb: "F5F5F5" } }
+    };
+    
+    // Применяем стили к заголовкам (первые 2 строки)
+    for (let r = 0; r < 2; r++) {
         for (let c = 0; c < headers.length; c++) {
-            const cell = XLSX.utils.encode_cell({r,c});
-            if (ws[cell]) {
-                ws[cell].s = ws[cell].s || {};
-                Object.assign(ws[cell].s, wrapStyle);
+            const cellAddress = XLSX.utils.encode_cell({ r, c });
+            ws[cellAddress] = ws[cellAddress] || { t: 's', v: data[r][c] || '' };
+            
+            if (c < 6) { // Общие сведения
+                ws[cellAddress].s = { ...grayStyle, ...centerStyle };
+            } else if (c < 10) { // Было
+                ws[cellAddress].s = { ...redHeaderStyle, ...centerStyle };
+            } else { // Стало
+                ws[cellAddress].s = { ...greenHeaderStyle, ...centerStyle };
             }
+        }
+    }
+    
+    // Применяем стили к данным
+    for (let r = 2; r < data.length; r++) {
+        for (let c = 0; c < headers.length; c++) {
+            const cellAddress = XLSX.utils.encode_cell({ r, c });
+            ws[cellAddress] = ws[cellAddress] || { t: 's', v: data[r][c] || '' };
+            
+            // Базовый стиль для ячейки
+            let cellStyle = {};
+            
+            // Определяем цвет фона
+            if (c < 6) { // Общие сведения
+                cellStyle = r % 2 === 0 ? grayDataStyle1 : grayDataStyle2;
+            } else if (c < 10) { // Было
+                cellStyle = r % 2 === 0 ? redDataStyle1 : redDataStyle2;
+            } else { // Стало
+                cellStyle = r % 2 === 0 ? greenDataStyle1 : greenDataStyle2;
+            }
+            
+            // Добавляем выравнивание
+            if (c === 4 || c === 8 || c === 12) {
+                cellStyle.alignment = { wrapText: true };
+            } else {
+                cellStyle.alignment = { horizontal: 'center' };
+            }
+            
+            ws[cellAddress].s = cellStyle;
         }
     }
     

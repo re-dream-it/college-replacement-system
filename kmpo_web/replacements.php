@@ -20,7 +20,7 @@
         </div>
 
         <div class="filters">
-            <input type="text" id="teacherFilter" placeholder="Преподаватель">
+            <input type="text" id="teacherFilter" placeholder="Фамилия преподавателя (например: Арзуманян)">
             <input type="text" id="disciplineFilter" placeholder="Код дисциплины / Дисциплина">
             <input type="text" id="pairFilter" placeholder="Номер пары">
         </div>

@@ -20,14 +20,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
         input.addEventListener('input', async function () {
             const query = input.value.trim();
-            if (query.length < 2) {
-                dropdown.classList.add('hidden')
-                dropdown.innerHTML = '';
-                return;
+
+            if (fieldId == 'newRoom' || fieldId == 'oldRoom'){
+                if (query.length == 0){
+                    dropdown.classList.add('hidden')
+                    dropdown.innerHTML = '';
+                    return;
+                }
+                else{
+                    dropdown.classList.remove('hidden')
+                }
+            } else {
+                if (query.length < 2){
+                    dropdown.classList.add('hidden')
+                    dropdown.innerHTML = '';
+                    return;
+                }
+                else{
+                    dropdown.classList.remove('hidden')
+                }
             }
-            else{
-                dropdown.classList.remove('hidden')
-            }
+
+
 
             try {
                 let response;

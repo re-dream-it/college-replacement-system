@@ -249,7 +249,7 @@ class WebDatabase extends DataBase
         $statement = $this->pdo->prepare("SELECT DISTINCT $fieldName FROM `rooms`
                         WHERE number LIKE :query
                         LIMIT 10;");
-        $statement->execute(['query' => "%$query%"]);
+        $statement->execute(['query' => "$query%"]);
         $data = $statement->fetchAll(PDO::FETCH_COLUMN);
         return $data;
     }

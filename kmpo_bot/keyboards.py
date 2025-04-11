@@ -14,7 +14,7 @@ async def main_menu_keyboard():
     buttons = [
         [InlineKeyboardButton(text="📚 Подписаться на группу", callback_data=f"subscribe_group")],
         [InlineKeyboardButton(text="👩‍🏫 Подписаться на преподавателя", callback_data=f"subscribe_teacher")],
-        [InlineKeyboardButton(text="📋 Список замен", url=f"https://kmpo.redream.space/replacements")]
+        [InlineKeyboardButton(text="📋 Список замен", url=f"https://rep.serviceskmpo.ru/")]
     ]
     keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
     return keyboard
@@ -28,7 +28,7 @@ async def back_keyboard():
 
 async def site_keyboard():
     buttons = [
-        [InlineKeyboardButton(text="📋 Список замен", url=f"https://kmpo.redream.space/replacements")]
+        [InlineKeyboardButton(text="📋 Список замен", url=f"https://rep.serviceskmpo.ru/")]
     ]
     keyboard = InlineKeyboardMarkup(inline_keyboard=buttons)
     return keyboard
