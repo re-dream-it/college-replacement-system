@@ -32,7 +32,7 @@
 |-----------------|-------------------------------------|
 | **Frontend**    | ![HTML5](https://img.shields.io/badge/HTML5-E34F26?logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/CSS3-1572B6?logo=css3) ![JavaScript](https://img.shields.io/badge/JavaScript-ES6+-F7DF1E?logo=javascript) |
 | **Backend**     | ![PHP](https://img.shields.io/badge/PHP-8.3-777BB4?logo=php) ![Python](https://img.shields.io/badge/Python-3.12-3776AB?logo=python) |
-| **База данных** | ![MySQL](https://img.shields.io/badge/MySQL-8.3-4479A1?logo=mysql)                    |
+| **База данных** | ![MariaDB](https://img.shields.io/badge/MariaDB-10.6-003545?logo=mariadb)                    |
 | **API**         | REST API                         |
 | **Telegram-бот**| ![aiogram](https://img.shields.io/badge/aiogram-3.18.0-26A5E4?logo=telegram)       |
 
