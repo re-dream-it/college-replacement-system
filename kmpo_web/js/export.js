@@ -44,12 +44,12 @@ document.getElementById('exportExcel').addEventListener('click', function() {
         { wch: 8 },   // Согл
         { wch: 20 },   // Препод (было)
         { wch: 25 },  // Дисциплина (было)
-        { wch: 10 },   // Номер пары (было)
-        { wch: 8 },   // Номер Кабинета (было)
+        { wch: 12 },   // Номер пары (было)
+        { wch: 9 },   // Номер Кабинета (было)
         { wch: 20 },  // Препод (стало)
         { wch: 25 },   // Дисциплина (стало)
-        { wch: 10 },   // Номер пары (стало)
-        { wch: 8 }   // Номер Кабинета (стало)
+        { wch: 12 },   // Номер пары (стало)
+        { wch: 9 }   // Номер Кабинета (стало)
     ];
     
     // Объединение ячеек
@@ -133,12 +133,10 @@ document.getElementById('exportExcel').addEventListener('click', function() {
                 cellStyle = r % 2 === 0 ? greenDataStyle1 : greenDataStyle2;
             }
             
-            // Добавляем выравнивание
-            if (c === 4 || c === 8 || c === 12) {
-                cellStyle.alignment = { wrapText: true };
-            } else {
-                cellStyle.alignment = { horizontal: 'center' };
-            }
+
+            // cellStyle.alignment = { horizontal: 'center' };
+            cellStyle.alignment = { wrapText: true, horizontal: 'center', vertical: 'center'};
+
             
             ws[cellAddress].s = cellStyle;
         }

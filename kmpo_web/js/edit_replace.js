@@ -2,13 +2,7 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     // Загружаем данные для сегодняшней даты при загрузке страницы
-    const dateField = document.getElementById('date')
-
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
-    const tomorrowFormatted = tomorrow.toISOString().split('T')[0];
-    dateField.value = tomorrowFormatted; 
+    const dateField = document.getElementById('date') 
 
     const fields = ['group', 'oldTeacher', 'oldDiscipline', 'newTeacher', 'newDiscipline', 'oldRoom', 'newRoom'];
 

@@ -15,14 +15,23 @@
                     <? endforeach; ?>
                 </div>
             </div>
+
             <input type="text" id="groupFilter" placeholder="Группа (например: 201-СА-23)">
-            <input type="text" id="roomFilter" placeholder="Кабинет (например: К612)">
         </div>
 
         <div class="filters">
+            <div class="dropdown-select">
+                <select id="confirmedFilter">
+                    <option value="all">Все</option>
+                    <option value="Да">Согласована</option>
+                    <option value="Нет">Не согласована</option>
+                </select>
+            </div>
             <input type="text" id="teacherFilter" placeholder="Фамилия преподавателя (например: Арзуманян)">
             <input type="text" id="disciplineFilter" placeholder="Код дисциплины / Дисциплина">
             <input type="text" id="pairFilter" placeholder="Номер пары">
+            <input type="text" id="roomFilter" placeholder="Кабинет (например: К612)">
+
         </div>
 
         
@@ -70,7 +79,7 @@
 </body>
 
 
-<script src="js/filter.js"></script>
-<script src="js/export.js"></script>
+<script src="js/filter.js?v2.0"></script>
+<script src="js/export.js?v=2.0"></script>
 <? include "footer.php"; ?>
                 

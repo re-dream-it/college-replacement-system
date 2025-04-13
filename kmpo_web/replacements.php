@@ -53,5 +53,5 @@
     </main>
 </body>
 
-<script src="js/filter.js"></script>
+<script src="js/filter.js?v2.0"></script>
 <? include "footer.php"; ?>

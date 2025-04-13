@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const pairFilter = document.getElementById('pairFilter');
     const roomFilter = document.getElementById('roomFilter');
     const typeFilters = document.querySelectorAll('input[name="typeFilter"]');
+    const confirmedFilter = document.getElementById('confirmedFilter');
+
 
     let replacementsData = [];
 
@@ -42,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const selectedTypes = Array.from(typeFilters)
             .filter(checkbox => checkbox.checked)
             .map(checkbox => checkbox.value);
+        
 
         // Фильтруем данные
         const filteredData = replacementsData.filter(replace => {
@@ -50,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const matchesRoom = room ? 
             (replace.was_cabinet.toLowerCase().includes(room) ||
             replace.became_cabinet.toLowerCase().includes(room)) : true;
-            console.log("Filter room:", room);
             const matchesTeacher = teacher ?
                 (replace.was_teacher_fullname.toLowerCase().includes(teacher) ||
                     replace.became_teacher_fullname.toLowerCase().includes(teacher)) : true;
@@ -62,7 +64,18 @@ document.addEventListener('DOMContentLoaded', function () {
             const matchesType = selectedTypes.length > 0 ?
                 selectedTypes.some(type => replace.replacement_types.includes(type)) : true;
 
-            return matchesGroup && matchesTeacher && matchesDiscipline && matchesPair && matchesType && matchesRoom;
+            replace.confirmed_text = replace.confirmed == 1 ? "Да" : "Нет";
+
+            if (window.location.pathname == '/admin_replacements') {
+                const confirmed = confirmedFilter.value;
+                const matchesConfirmed = confirmed !== 'all' ? replace.confirmed_text === confirmed : true;
+                return matchesGroup && matchesTeacher && matchesDiscipline && matchesPair && matchesType && matchesRoom && matchesConfirmed;
+            }
+            else if (window.location.pathname == '/replacements') {
+                return matchesGroup && matchesTeacher && matchesDiscipline && matchesPair && matchesType && matchesRoom;
+            }
+
+
         });
 
         renderTable(filteredData);
@@ -269,4 +282,5 @@ document.addEventListener('DOMContentLoaded', function () {
     typeFilters.forEach(checkbox => {
         checkbox.addEventListener('change', applyFilters);
     });
+    confirmedFilter.addEventListener('change', applyFilters);
 });

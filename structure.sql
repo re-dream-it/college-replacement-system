@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Хост: localhost:3306
--- Время создания: Апр 01 2025 г., 22:24
--- Версия сервера: 11.4.5-MariaDB-ubu2404
--- Версия PHP: 8.3.17
+-- Host: localhost
+-- Generation Time: Apr 13, 2025 at 07:15 PM
+-- Server version: 10.6.21-MariaDB-0ubuntu0.22.04.2
+-- PHP Version: 8.3.19
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,36 +18,36 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- База данных: `redream_web_kmporep`
+-- Database: `kmpo_replacements`
 --
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `departments`
+-- Table structure for table `departments`
 --
 
 CREATE TABLE `departments` (
   `id` tinyint(4) NOT NULL,
   `name` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `disciplines`
+-- Table structure for table `disciplines`
 --
 
 CREATE TABLE `disciplines` (
   `id` smallint(6) NOT NULL,
   `code` varchar(20) NOT NULL,
   `name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `employes`
+-- Table structure for table `employes`
 --
 
 CREATE TABLE `employes` (
@@ -58,35 +58,35 @@ CREATE TABLE `employes` (
   `password` varchar(255) NOT NULL,
   `login` varchar(30) NOT NULL,
   `post` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `groups`
+-- Table structure for table `groups`
 --
 
 CREATE TABLE `groups` (
   `id` smallint(6) NOT NULL,
   `name` varchar(12) NOT NULL,
   `department_id` tinyint(4) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `groups_disciplines`
+-- Table structure for table `groups_disciplines`
 --
 
 CREATE TABLE `groups_disciplines` (
   `group_id` smallint(6) NOT NULL,
   `discipline_id` smallint(6) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `replacements`
+-- Table structure for table `replacements`
 --
 
 CREATE TABLE `replacements` (
@@ -100,12 +100,12 @@ CREATE TABLE `replacements` (
   `became_id` int(11) DEFAULT NULL,
   `create_date` datetime NOT NULL DEFAULT current_timestamp(),
   `reason` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `replacement_components`
+-- Table structure for table `replacement_components`
 --
 
 CREATE TABLE `replacement_components` (
@@ -114,45 +114,45 @@ CREATE TABLE `replacement_components` (
   `teacher_id` smallint(6) DEFAULT NULL,
   `slot_id` smallint(6) DEFAULT NULL,
   `discipline_id` smallint(6) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `replacement_types`
+-- Table structure for table `replacement_types`
 --
 
 CREATE TABLE `replacement_types` (
   `type_id` smallint(6) NOT NULL,
   `replace_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `rooms`
+-- Table structure for table `rooms`
 --
 
 CREATE TABLE `rooms` (
-  `number` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+  `number` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `slots`
+-- Table structure for table `slots`
 --
 
 CREATE TABLE `slots` (
   `id` smallint(6) NOT NULL,
   `start_time` time NOT NULL,
   `end_time` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `teachers`
+-- Table structure for table `teachers`
 --
 
 CREATE TABLE `teachers` (
@@ -160,23 +160,23 @@ CREATE TABLE `teachers` (
   `lastname` varchar(25) NOT NULL,
   `name` varchar(25) NOT NULL,
   `surname` varchar(25) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `types`
+-- Table structure for table `types`
 --
 
 CREATE TABLE `types` (
   `id` smallint(6) NOT NULL,
   `name` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Структура таблицы `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -184,21 +184,21 @@ CREATE TABLE `users` (
   `username` varchar(25) DEFAULT NULL,
   `group_id` smallint(6) DEFAULT NULL,
   `teacher_id` smallint(6) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Индексы сохранённых таблиц
+-- Indexes for dumped tables
 --
 
 --
--- Индексы таблицы `departments`
+-- Indexes for table `departments`
 --
 ALTER TABLE `departments`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`);
 
 --
--- Индексы таблицы `disciplines`
+-- Indexes for table `disciplines`
 --
 ALTER TABLE `disciplines`
   ADD PRIMARY KEY (`id`),
@@ -206,13 +206,13 @@ ALTER TABLE `disciplines`
   ADD KEY `code` (`code`) USING BTREE;
 
 --
--- Индексы таблицы `employes`
+-- Indexes for table `employes`
 --
 ALTER TABLE `employes`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `groups`
+-- Indexes for table `groups`
 --
 ALTER TABLE `groups`
   ADD PRIMARY KEY (`id`),
@@ -220,14 +220,14 @@ ALTER TABLE `groups`
   ADD KEY `department_id` (`department_id`);
 
 --
--- Индексы таблицы `groups_disciplines`
+-- Indexes for table `groups_disciplines`
 --
 ALTER TABLE `groups_disciplines`
   ADD KEY `discipline_id` (`discipline_id`),
   ADD KEY `group_id` (`group_id`);
 
 --
--- Индексы таблицы `replacements`
+-- Indexes for table `replacements`
 --
 ALTER TABLE `replacements`
   ADD PRIMARY KEY (`id`),
@@ -237,7 +237,7 @@ ALTER TABLE `replacements`
   ADD KEY `became_id` (`became_id`);
 
 --
--- Индексы таблицы `replacement_components`
+-- Indexes for table `replacement_components`
 --
 ALTER TABLE `replacement_components`
   ADD PRIMARY KEY (`id`),
@@ -246,20 +246,20 @@ ALTER TABLE `replacement_components`
   ADD KEY `teacher_id` (`teacher_id`);
 
 --
--- Индексы таблицы `replacement_types`
+-- Indexes for table `replacement_types`
 --
 ALTER TABLE `replacement_types`
   ADD KEY `type_id` (`type_id`),
   ADD KEY `replace_id` (`replace_id`);
 
 --
--- Индексы таблицы `rooms`
+-- Indexes for table `rooms`
 --
 ALTER TABLE `rooms`
   ADD PRIMARY KEY (`number`);
 
 --
--- Индексы таблицы `slots`
+-- Indexes for table `slots`
 --
 ALTER TABLE `slots`
   ADD PRIMARY KEY (`id`),
@@ -267,20 +267,20 @@ ALTER TABLE `slots`
   ADD UNIQUE KEY `end_time` (`end_time`);
 
 --
--- Индексы таблицы `teachers`
+-- Indexes for table `teachers`
 --
 ALTER TABLE `teachers`
   ADD PRIMARY KEY (`id`);
 
 --
--- Индексы таблицы `types`
+-- Indexes for table `types`
 --
 ALTER TABLE `types`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `name` (`name`);
 
 --
--- Индексы таблицы `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
@@ -288,76 +288,76 @@ ALTER TABLE `users`
   ADD KEY `teacher_id` (`teacher_id`);
 
 --
--- AUTO_INCREMENT для сохранённых таблиц
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT для таблицы `departments`
+-- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
   MODIFY `id` tinyint(4) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT для таблицы `disciplines`
+-- AUTO_INCREMENT for table `disciplines`
 --
 ALTER TABLE `disciplines`
   MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT для таблицы `employes`
+-- AUTO_INCREMENT for table `employes`
 --
 ALTER TABLE `employes`
   MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT для таблицы `groups`
+-- AUTO_INCREMENT for table `groups`
 --
 ALTER TABLE `groups`
   MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT для таблицы `replacements`
+-- AUTO_INCREMENT for table `replacements`
 --
 ALTER TABLE `replacements`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT для таблицы `replacement_components`
+-- AUTO_INCREMENT for table `replacement_components`
 --
 ALTER TABLE `replacement_components`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT для таблицы `teachers`
+-- AUTO_INCREMENT for table `teachers`
 --
 ALTER TABLE `teachers`
   MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT для таблицы `types`
+-- AUTO_INCREMENT for table `types`
 --
 ALTER TABLE `types`
   MODIFY `id` smallint(6) NOT NULL AUTO_INCREMENT;
 
 --
--- Ограничения внешнего ключа сохраненных таблиц
+-- Constraints for dumped tables
 --
 
 --
--- Ограничения внешнего ключа таблицы `groups`
+-- Constraints for table `groups`
 --
 ALTER TABLE `groups`
   ADD CONSTRAINT `group:department` FOREIGN KEY (`department_id`) REFERENCES `departments` (`id`) ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `groups_disciplines`
+-- Constraints for table `groups_disciplines`
 --
 ALTER TABLE `groups_disciplines`
   ADD CONSTRAINT `groups_disciplines_ibfk_1` FOREIGN KEY (`discipline_id`) REFERENCES `disciplines` (`id`),
   ADD CONSTRAINT `groups_disciplines_ibfk_2` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`);
 
 --
--- Ограничения внешнего ключа таблицы `replacements`
+-- Constraints for table `replacements`
 --
 ALTER TABLE `replacements`
   ADD CONSTRAINT `replace:became` FOREIGN KEY (`became_id`) REFERENCES `replacement_components` (`id`) ON UPDATE NO ACTION,
@@ -366,7 +366,7 @@ ALTER TABLE `replacements`
   ADD CONSTRAINT `replace:was` FOREIGN KEY (`was_id`) REFERENCES `replacement_components` (`id`) ON UPDATE NO ACTION;
 
 --
--- Ограничения внешнего ключа таблицы `replacement_components`
+-- Constraints for table `replacement_components`
 --
 ALTER TABLE `replacement_components`
   ADD CONSTRAINT `component:discipline` FOREIGN KEY (`discipline_id`) REFERENCES `disciplines` (`id`) ON UPDATE CASCADE,
@@ -374,14 +374,14 @@ ALTER TABLE `replacement_components`
   ADD CONSTRAINT `component:teacher` FOREIGN KEY (`teacher_id`) REFERENCES `teachers` (`id`) ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `replacement_types`
+-- Constraints for table `replacement_types`
 --
 ALTER TABLE `replacement_types`
   ADD CONSTRAINT `replace` FOREIGN KEY (`replace_id`) REFERENCES `replacements` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `type` FOREIGN KEY (`type_id`) REFERENCES `types` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
--- Ограничения внешнего ключа таблицы `users`
+-- Constraints for table `users`
 --
 ALTER TABLE `users`
   ADD CONSTRAINT `user:group` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,

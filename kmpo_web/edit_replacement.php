@@ -19,7 +19,7 @@ $replacement = $DB->getReplace($replacement_id);
             <div class="form-row">
                 <div class="form-group">
                     <label for="date">Дата:</label>
-                    <input autocomplete="off" type="date" id="date" name="date" required>
+                    <input autocomplete="off" type="date" id="date" name="date" value="<?=$replacement['date']?>" required>
                 </div>
 
                 <div class="form-group">
