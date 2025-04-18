@@ -7,7 +7,7 @@
 
 ## 🔗 Основные ссылки
 
-- [Официальный сайт системы]([https://kmpo.redream.space](https://rep.serviceskmpo.ru))
+- [Официальный сайт системы](https://rep.serviceskmpo.ru)
 - [Телеграм-бот](https://t.me/kmporeplace_bot)
 - [Презентация проекта](https://docs.google.com/presentation/d/1552efsdXop9co7hJB9tNC1tuZSke07afWvf_sY6Ebaw/edit?usp=sharing)
 - [Научная статья о проекте](https://docs.google.com/document/d/1QVbHwBq4nppWGIbAkyR--Mjfr5f55h-9VtwLhNuS4iM/edit?usp=sharing)
