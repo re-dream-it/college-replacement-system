@@ -49,49 +49,10 @@ document.addEventListener('DOMContentLoaded', function () {
             } catch (error) {
                 console.error('Ошибка:', error);
             }
-
-            // Закрываем dropdown при потере фокуса
-            input.addEventListener('blur', function() {
-                setTimeout(() => {
-                    dropdown.classList.add('hidden');
-                }, 500);
-            });
         });
-
-        // Функция для перехода к следующему полю
-        function moveToNextField(currentField) {
-            const allInputs = Array.from(document.querySelectorAll('input:not([type="checkbox"]), select, textarea'));
-            const currentIndex = allInputs.indexOf(currentField);
-            
-            if (currentIndex < allInputs.length - 1) {
-                allInputs[currentIndex + 1].focus();
-            }
-        }
-
-        // Обработка нажатия Enter для переключения между полями
-        document.querySelectorAll('input:not([type="checkbox"]), select, textarea').forEach(input => {
-            input.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
-                    e.preventDefault();
-                    
-                    // Если открыто автодополнение, выбираем первый вариант
-                    const dropdown = this.parentNode.querySelector('.autocomplete-dropdown');
-                    if (dropdown && !dropdown.classList.contains('hidden')) {
-                        const firstOption = dropdown.querySelector('.autocomplete-option');
-                        if (firstOption) {
-                            this.value = firstOption.textContent;
-                            dropdown.classList.add('hidden');
-                            dropdown.innerHTML = '';
-                        }
-                    }
-                    
-                    moveToNextField(this);
-                }
-            });
-        });
-        });
-
+    });
 });
+
 // Обрабтка данных формы
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('replacementForm');
@@ -212,7 +173,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (result.success) {
                 alert('Замена успешно изменена!');
-                document.location.href = '/admin_replacements'
             } else {
                 alert('Ошибка: ' + result.message);
             }
