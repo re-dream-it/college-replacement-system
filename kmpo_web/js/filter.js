@@ -75,7 +75,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 return matchesGroup && matchesTeacher && matchesDiscipline && matchesPair && matchesType && matchesRoom;
             }
 
-
         });
 
         renderTable(filteredData);
@@ -256,6 +255,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         
     });
+
+    // В начале загрузки страницы (после определения всех элементов)
+    setInterval(() => {
+        const selectedDate = dateFilter.value;
+        if (selectedDate) {
+            loadReplacementsByDate(selectedDate);
+        }
+    }, 3000);
 
 
 

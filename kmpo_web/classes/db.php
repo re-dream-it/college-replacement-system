@@ -245,13 +245,15 @@ class WebDatabase extends DataBase
     }
 
     // Подсказки кабинетов
-    public function getRoomFields($table, $fieldName, $query){
+    public function getRoomFields($table, $fieldName, $query) {
         $statement = $this->pdo->prepare("SELECT DISTINCT $fieldName FROM `rooms`
-                        WHERE number LIKE :query
+                        WHERE number LIKE :query OR number LIKE :numeric_query
                         LIMIT 10;");
-        $statement->execute(['query' => "$query%"]);
-        $data = $statement->fetchAll(PDO::FETCH_COLUMN);
-        return $data;
+        $statement->execute([
+            'query' => "$query%",
+            'numeric_query' => "%$query%"
+        ]);
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
     }
 
     // Проверка существования ФИО преподавателя
