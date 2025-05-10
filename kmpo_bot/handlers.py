@@ -1,5 +1,6 @@
 from loader import dp, bot, db
 from aiogram import types, F
+from aiogram.filters import Command
 from states import Subscribe
 from aiogram.fsm.context import FSMContext
 from aiohttp import web
@@ -38,9 +39,15 @@ async def start_text(id):
     text = f"🏠 *Главное меню*\n\nВаша группа: `{user['group_name']}`\nВыбранный преподаватель: `{user['teacher_name']}`\n\n/reset - команда для сброса текущих подписок"
     return text
 
-async def replacement_text(replacement):
-    text = f"""🔔 <b>Новая замена!</b>
-<b>ID:</b> <code>{replacement['replacement_id']}</code>
+async def replacement_text(replacement, rtype):
+    if rtype == 'new':
+        text = f"""🔔 <b>Новая замена!</b>\n"""
+    elif rtype == 'edit':
+        text = f"""✏️ <b>Замена была изменена!</b>\n"""
+    elif rtype == 'delete':
+        text = f"""⚠️ <b>Замена была отменена!</b>\n\n❗️ Занятие будет проводиться согласно обычному расписанию.\n\n\n🗑️ <b>Отмененная замена:</b>\n"""
+
+    text += f"""<b>ID:</b> <code>{replacement['replacement_id']}</code>
 <b>Изменения:</b> <code>{replacement['replacement_types']}</code>
 <b>Группа:</b> <code>{replacement['group_name']}</code>
 <b>Дата:</b> <code>{replacement['date']}</code>\n"""
@@ -58,28 +65,10 @@ async def replacement_text(replacement):
 <b>Кабинет:</b> <code>{replacement['became_cabinet']}</code>"""
     return text
 
-async def edit_replacement_text(replacement):
-    text = f"""✏️ <b>Замена была изменена!</b>
-<b>ID:</b> <code>{replacement['replacement_id']}</code>
-<b>Изменения:</b> <code>{replacement['replacement_types']}</code>
-<b>Группа:</b> <code>{replacement['group_name']}</code>
-<b>Дата:</b> <code>{replacement['date']}</code>\n"""
-    if not 'Добавление пары' in replacement['replacement_types']:
-        text += f"""\n<b>✖️ Было</b>:
-<b>Преподаватель:</b> <code>{replacement['was_teacher_fullname']}</code>
-<b>Дисциплина:</b> <code>{replacement['was_discipline']}</code>
-<b>Номер пары:</b> <code>{replacement['was_slot_id']}</code>
-<b>Кабинет:</b> <code>{replacement['was_cabinet']}</code>\n"""
-    if not 'Отмена пары' in replacement['replacement_types']:
-        text += f"""\n<b>✔️ Стало</b>:
-<b>Преподаватель:</b> <code>{replacement['became_teacher_fullname']}</code>
-<b>Дисциплина:</b> <code>{replacement['became_discipline']}</code>
-<b>Номер пары:</b> <code>{replacement['became_slot_id']}</code>
-<b>Кабинет:</b> <code>{replacement['became_cabinet']}</code>"""
-    return text
+
 
 # reset
-@dp.message(F.text == ('/reset'))
+@dp.message(Command('reset'))
 async def execute_command(message: types.Message, state: FSMContext):
     await db.delete_user(message.from_user.id)
     await bot.send_message(message.from_user.id, f"Ваши данные были сброшены!", parse_mode='markdown', reply_markup=await keyboards.main_keyboard())
@@ -88,12 +77,12 @@ async def execute_command(message: types.Message, state: FSMContext):
     user = await check_user(message.from_user.id, message.from_user.username)
     text = await start_text(message.from_user.id)
 
-    await bot.send_message(message.from_user.id, f"👋 *Добро пожаловать!* \nЭто бот, который сможет уведомлять вас о ваших заменах!\n\nДля начала работы, вам необходимо подписаться на свою группу или на преподавателя.", parse_mode='markdown', reply_markup=await keyboards.main_keyboard())
+    # await bot.send_message(message.from_user.id, f"👋 *Добро пожаловать!* \nЭто бот, который сможет уведомлять вас о ваших заменах!\n\nДля начала работы, вам необходимо подписаться на свою группу или на преподавателя.", parse_mode='markdown', reply_markup=await keyboards.main_keyboard())
     await bot.send_message(message.from_user.id, text, parse_mode='markdown', reply_markup=await keyboards.main_menu_keyboard())
 
 
 # start
-@dp.message(F.text == ('/start'))
+@dp.message(Command('start'))
 async def execute_command(message: types.Message, state: FSMContext):
     await state.clear()
     user = await check_user(message.from_user.id, message.from_user.username)
@@ -170,7 +159,7 @@ async def accept_replace(request):
 # Рассылка замен
 async def send_notifications_background(data):
     replacement = await db.get_replace(data['replacement_id'])
-    text = await replacement_text(replacement)
+    text = await replacement_text(replacement, 'new')
     await bot.send_message(INFO_CHAN, text, parse_mode='html', reply_markup=await keyboards.site_keyboard())
     print(f"Spam rep №{replacement['replacement_id']} started!")
 
@@ -201,7 +190,7 @@ async def accept_edit_replace(request):
 # Рассылка изменения замен
 async def send_edit_notifications_background(data):
     replacement = await db.get_replace(data['replacement_id'])
-    text = await edit_replacement_text(replacement)
+    text = await replacement_text(replacement, 'edit')
     await bot.send_message(INFO_CHAN, text, parse_mode='html', reply_markup=await keyboards.site_keyboard())
     print(f"Spam edit rep №{replacement['replacement_id']} started!")
 
@@ -232,7 +221,7 @@ async def delete_replace(request):
 
 # Рассылка удаления замен
 async def send_del_notifications_background(replacement):
-    text = f"⚠️ Замена №{replacement['replacement_id']} была удалена и проводиться не будет!"
+    text = await replacement_text(replacement, 'delete')
     await bot.send_message(INFO_CHAN, text, parse_mode='html', reply_markup=await keyboards.site_keyboard())
     print(f"Spam rep №{replacement['replacement_id']} started!")
 

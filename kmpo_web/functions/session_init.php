@@ -1,6 +1,7 @@
 <?php
+ini_set('session.gc_maxlifetime', 43200); 
 session_start([
-    'cookie_lifetime' => 7200,
+    'cookie_lifetime' => 43200,
     'cookie_secure'   => true,    // Только HTTPS
     'cookie_httponly' => true,    // Запрет доступа из JavaScript
     'use_strict_mode' => true     // Защита от фиксации сессии
