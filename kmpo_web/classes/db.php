@@ -65,12 +65,13 @@ class WebDatabase extends DataBase
         return $data;
     }
 
-    // Получение списка замен
+    // Получение списка замен для админ панели
     public function getReplacesAdmin($date){
         $statement = $this->pdo->prepare("SELECT 
             -- Основные сведения
             r.id AS replacement_id,
             r.date,
+            r.is_introduced,
             CONCAT(g.name, ' ', r.group_part) AS group_name,
             r.reason AS reason,
             r.confirmed AS confirmed,

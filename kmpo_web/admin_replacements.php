@@ -47,7 +47,7 @@
         <table>
             <thead>
                 <tr>
-                    <th colspan="6" class="left">Общ. сведения</th>
+                    <th colspan="7" class="left">Общ. сведения</th>
                     <th colspan="4" class="was-header">Было</th>
                     <th colspan="4" class="became-header right">Стало</th>
                     <th class="hidden_tab"></th>
@@ -55,6 +55,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Дата</th>
+                    <th>Внесена</th>
                     <th>Группа</th>
                     <th>Тип замены</th>
                     <th>Причина</th>

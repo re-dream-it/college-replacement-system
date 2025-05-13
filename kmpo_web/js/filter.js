@@ -48,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Фильтруем данные
         const filteredData = replacementsData.filter(replace => {
-            // console.log(replace.confirmed);
             const matchesGroup = group ? replace.group_name.toLowerCase().includes(group) : true;
             const matchesRoom = room ? 
             (replace.was_cabinet.toLowerCase().includes(room) ||
@@ -100,23 +99,34 @@ document.addEventListener('DOMContentLoaded', function () {
         data.forEach(replace => {
             const row = document.createElement('tr');
             if (window.location.pathname == '/admin_replacements') {
-                    // console.log(replace.confirmed)
                     if (replace.confirmed == 1){
-                        replace.confirmed_text = "Да"
-                        conf_btn = ``;
+                        replace.confirmedText = "Да"
+                        confirmButton = '';
                     }
                     else{
-                        replace.confirmed_text = "Нет"
-                        conf_btn = `<button type="button" data-replacement-id="${replace.replacement_id}" class="dropdown-actions-item confirm-btn">
+                        replace.confirmedText = "Нет"
+                        confirmButton = `<button type="button" data-replacement-id="${replace.replacement_id}" class="dropdown-actions-item confirm-btn">
                                         <i class="fa-solid fa-check"></i> Подтвердить
+                                    </button>`                    
+                    }
+
+                    if (replace.is_introduced == 1){
+                        replace.is_introducedText = "Да"
+                        introduceButton = '';
+                    }
+                    else{
+                        replace.is_introducedText = "Нет"
+                        introduceButton = `<button type="button" data-replacement-id="${replace.replacement_id}" class="dropdown-actions-item introduce-btn">
+                                        <i class="fa-solid fa-book"></i> Внесена
                                     </button>`                    
                     }
                     row.innerHTML = `
                     <td>${replace.replacement_id}</td>
                     <td>${replace.date}</td>
+                    <td>${replace.is_introducedText}</td>
                     <td>${replace.group_name}</td>
                     <td>${replace.replacement_types}</td>
-                    <td>${replace.reason}</td>
+                    <td>${replace.reason}</confirmedText>
                     <td>${replace.confirmed_text}</td>
                     <td class="was">${replace.was_teacher_fullname}</td>
                     <td class="was">${replace.was_discipline}</td>
@@ -130,7 +140,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="dropdown-actions">
                             <button class="dropdown-actions-toggle" type="button"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                             <div class="dropdown-actions-menu">
-                                ${conf_btn}
+                                ${introduceButton}
+                                ${confirmButton}
                                 <a href="edit_replacement?id=${replace.replacement_id}"><button type="button" data-replacement-id="${replace.replacement_id}" class="dropdown-actions-item edit-btn">
                                     <i class="fa-solid fa-pen-to-square"></i> Изменить
                                 </button></a>
@@ -212,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Функция для удаления замены
+    // Функция для подтверждения замены
     async function confirmReplacement(replacementId) {
         try {
             const response = await fetch(`functions/confirm_replacement.php`, {

@@ -390,7 +390,7 @@ table tr:hover td {
 } */
 
 /* Кнопка удаления */
-.delete-btn, .confirm-btn, .edit-btn {
+.delete-btn, .confirm-btn, .edit-btn, .introduce-btn {
     background: none;
     border: none;
     color: #B90039;
