@@ -16,13 +16,21 @@
                 </div>
             </div>
 
+            <div class="dropdown-select">
+                <select id="introducedFilter">
+                    <option value="all">Внесена (все)</option>
+                    <option value="Да">Внесенные</option>
+                    <option value="Нет">Не внесенные</option>
+                </select>
+            </div>
+
             <input type="text" id="groupFilter" placeholder="Группа (например: 201-СА-23)">
         </div>
 
         <div class="filters">
             <div class="dropdown-select">
                 <select id="confirmedFilter">
-                    <option value="all">Все</option>
+                    <option value="all">Согласованность (все)</option>
                     <option value="Да">Согласована</option>
                     <option value="Нет">Не согласована</option>
                 </select>

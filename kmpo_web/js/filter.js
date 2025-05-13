@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const roomFilter = document.getElementById('roomFilter');
     const typeFilters = document.querySelectorAll('input[name="typeFilter"]');
     const confirmedFilter = document.getElementById('confirmedFilter');
+    const introducedFilter = document.getElementById('introducedFilter');
 
 
     let replacementsData = [];
@@ -63,12 +64,25 @@ document.addEventListener('DOMContentLoaded', function () {
             const matchesType = selectedTypes.length > 0 ?
                 selectedTypes.some(type => replace.replacement_types.includes(type)) : true;
 
-            replace.confirmed_text = replace.confirmed == 1 ? "Да" : "Нет";
 
             if (window.location.pathname == '/admin_replacements') {
+                replace.confirmed_text = replace.confirmed == 1 ? "Да" : "Нет";
+
+                replace.introduced_text = replace.is_introduced == 1 ? "Да" : replace.is_introduced == 2 ? "Изм." : "Нет";
+
                 const confirmed = confirmedFilter.value;
                 const matchesConfirmed = confirmed !== 'all' ? replace.confirmed_text === confirmed : true;
-                return matchesGroup && matchesTeacher && matchesDiscipline && matchesPair && matchesType && matchesRoom && matchesConfirmed;
+
+                let introduced = introducedFilter.value;
+                let matchesIntroduced = true;
+                if(introduced === 'Да') {
+                    matchesIntroduced = replace.is_introduced == 1 ? true : false;
+                }
+                else if(introduced === 'Нет') {
+                    matchesIntroduced = replace.is_introduced !== 1 ? true : false;
+                }
+
+                return matchesGroup && matchesTeacher && matchesDiscipline && matchesPair && matchesType && matchesRoom && matchesConfirmed && matchesIntroduced;
             }
             else if (window.location.pathname == '/replacements') {
                 return matchesGroup && matchesTeacher && matchesDiscipline && matchesPair && matchesType && matchesRoom;
@@ -87,10 +101,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (data.length === 0) {
             // Если данных нет
             if (window.location.pathname == '/admin_replacements') {
-                tbody.innerHTML = `<tr><td colspan="13" style="text-align: center;">Нет данных для отображения</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="14" style="text-align: center;">Нет данных для отображения</td></tr>`;
             }
             else if (window.location.pathname == '/replacements') {
-                tbody.innerHTML = `<tr><td colspan="12" style="text-align: center;">Нет данных для отображения</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="14" style="text-align: center;">Нет данных для отображения</td></tr>`;
             }
             return;
         }
@@ -331,4 +345,5 @@ document.addEventListener('DOMContentLoaded', function () {
         checkbox.addEventListener('change', applyFilters);
     });
     confirmedFilter.addEventListener('change', applyFilters);
+    introducedFilter.addEventListener('change', applyFilters);
 });
