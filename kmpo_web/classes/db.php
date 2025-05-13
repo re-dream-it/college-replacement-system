@@ -661,5 +661,12 @@ class WebDatabase extends DataBase
         $statement->execute(['replace_id' => $replacement_id]);
         return true;
     }
+
+    // Отмека замены "Измененной"
+    public function setReplacementChanged($replacement_id) {
+        $statement = $this->pdo->prepare("UPDATE replacements SET is_introduced = 2 WHERE id = :replace_id;");
+        $statement->execute(['replace_id' => $replacement_id]);
+        return true;
+    }
 }
 

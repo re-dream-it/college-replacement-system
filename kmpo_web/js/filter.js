@@ -113,12 +113,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (replace.is_introduced == 1){
                         replace.is_introducedText = "Да"
                         introduceButton = '';
-                    }
-                    else{
-                        replace.is_introducedText = "Нет"
+                    } 
+                    else {
                         introduceButton = `<button type="button" data-replacement-id="${replace.replacement_id}" class="dropdown-actions-item introduce-btn">
-                                        <i class="fa-solid fa-book"></i> Внесена
-                                    </button>`                    
+                            <i class="fa-solid fa-book"></i> Внесена
+                        </button>` 
+                        if (replace.is_introduced == 0){
+                            replace.is_introducedText = "Нет"                 
+                        }
+                        else if (replace.is_introduced == 2){
+                            replace.is_introducedText = "Изм."                 
+                        }
                     }
                     row.innerHTML = `
                     <td>${replace.replacement_id}</td>
