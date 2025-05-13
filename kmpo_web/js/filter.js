@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const roomFilter = document.getElementById('roomFilter');
     const typeFilters = document.querySelectorAll('input[name="typeFilter"]');
     const confirmedFilter = document.getElementById('confirmedFilter');
+    const introducedFilter = document.getElementById('introducedFilter');
 
 
     let replacementsData = [];
@@ -48,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Фильтруем данные
         const filteredData = replacementsData.filter(replace => {
-            // console.log(replace.confirmed);
             const matchesGroup = group ? replace.group_name.toLowerCase().includes(group) : true;
             const matchesRoom = room ? 
             (replace.was_cabinet.toLowerCase().includes(room) ||
@@ -64,12 +64,25 @@ document.addEventListener('DOMContentLoaded', function () {
             const matchesType = selectedTypes.length > 0 ?
                 selectedTypes.some(type => replace.replacement_types.includes(type)) : true;
 
-            replace.confirmed_text = replace.confirmed == 1 ? "Да" : "Нет";
 
             if (window.location.pathname == '/admin_replacements') {
+                replace.confirmed_text = replace.confirmed == 1 ? "Да" : "Нет";
+
+                replace.introduced_text = replace.is_introduced == 1 ? "Да" : replace.is_introduced == 2 ? "Изм." : "Нет";
+
                 const confirmed = confirmedFilter.value;
                 const matchesConfirmed = confirmed !== 'all' ? replace.confirmed_text === confirmed : true;
-                return matchesGroup && matchesTeacher && matchesDiscipline && matchesPair && matchesType && matchesRoom && matchesConfirmed;
+
+                let introduced = introducedFilter.value;
+                let matchesIntroduced = true;
+                if(introduced === 'Да') {
+                    matchesIntroduced = replace.is_introduced == 1 ? true : false;
+                }
+                else if(introduced === 'Нет') {
+                    matchesIntroduced = replace.is_introduced !== 1 ? true : false;
+                }
+
+                return matchesGroup && matchesTeacher && matchesDiscipline && matchesPair && matchesType && matchesRoom && matchesConfirmed && matchesIntroduced;
             }
             else if (window.location.pathname == '/replacements') {
                 return matchesGroup && matchesTeacher && matchesDiscipline && matchesPair && matchesType && matchesRoom;
@@ -88,10 +101,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (data.length === 0) {
             // Если данных нет
             if (window.location.pathname == '/admin_replacements') {
-                tbody.innerHTML = `<tr><td colspan="13" style="text-align: center;">Нет данных для отображения</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="14" style="text-align: center;">Нет данных для отображения</td></tr>`;
             }
             else if (window.location.pathname == '/replacements') {
-                tbody.innerHTML = `<tr><td colspan="12" style="text-align: center;">Нет данных для отображения</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="14" style="text-align: center;">Нет данных для отображения</td></tr>`;
             }
             return;
         }
@@ -100,23 +113,39 @@ document.addEventListener('DOMContentLoaded', function () {
         data.forEach(replace => {
             const row = document.createElement('tr');
             if (window.location.pathname == '/admin_replacements') {
-                    // console.log(replace.confirmed)
                     if (replace.confirmed == 1){
-                        replace.confirmed_text = "Да"
-                        conf_btn = ``;
+                        replace.confirmedText = "Да"
+                        confirmButton = '';
                     }
                     else{
-                        replace.confirmed_text = "Нет"
-                        conf_btn = `<button type="button" data-replacement-id="${replace.replacement_id}" class="dropdown-actions-item confirm-btn">
+                        replace.confirmedText = "Нет"
+                        confirmButton = `<button type="button" data-replacement-id="${replace.replacement_id}" class="dropdown-actions-item confirm-btn">
                                         <i class="fa-solid fa-check"></i> Подтвердить
                                     </button>`                    
+                    }
+
+                    if (replace.is_introduced == 1){
+                        replace.is_introducedText = "Да"
+                        introduceButton = '';
+                    } 
+                    else {
+                        introduceButton = `<button type="button" data-replacement-id="${replace.replacement_id}" class="dropdown-actions-item introduce-btn">
+                            <i class="fa-solid fa-book"></i> Внесена
+                        </button>` 
+                        if (replace.is_introduced == 0){
+                            replace.is_introducedText = "Нет"                 
+                        }
+                        else if (replace.is_introduced == 2){
+                            replace.is_introducedText = "Изм."                 
+                        }
                     }
                     row.innerHTML = `
                     <td>${replace.replacement_id}</td>
                     <td>${replace.date}</td>
+                    <td>${replace.is_introducedText}</td>
                     <td>${replace.group_name}</td>
                     <td>${replace.replacement_types}</td>
-                    <td>${replace.reason}</td>
+                    <td>${replace.reason}</confirmedText>
                     <td>${replace.confirmed_text}</td>
                     <td class="was">${replace.was_teacher_fullname}</td>
                     <td class="was">${replace.was_discipline}</td>
@@ -130,7 +159,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         <div class="dropdown-actions">
                             <button class="dropdown-actions-toggle" type="button"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                             <div class="dropdown-actions-menu">
-                                ${conf_btn}
+                                ${introduceButton}
+                                ${confirmButton}
                                 <a href="edit_replacement?id=${replace.replacement_id}"><button type="button" data-replacement-id="${replace.replacement_id}" class="dropdown-actions-item edit-btn">
                                     <i class="fa-solid fa-pen-to-square"></i> Изменить
                                 </button></a>
@@ -165,13 +195,11 @@ document.addEventListener('DOMContentLoaded', function () {
             tbody.appendChild(row);
         });
 
-        // Добавляем обработчики для кнопок удаления и подтверждения
-        addDeleteHandlers();
-        addConfirmHandlers();
+        addDropdownHandlers();
     }
 
     // Функция для добавления обработчиков удаления
-    function addDeleteHandlers() {
+    function addDropdownHandlers() {
         const deleteButtons = document.querySelectorAll('.delete-btn');
         deleteButtons.forEach(button => {
             button.addEventListener('click', async function () {
@@ -182,10 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         });
-    }
 
-    // Функция для добавления обработчика утверждения
-    function addConfirmHandlers() {
         const confirmButtons = document.querySelectorAll('.confirm-btn');
         confirmButtons.forEach(button => {
             button.addEventListener('click', async function () {
@@ -196,7 +221,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         });
+
+        const introduceButtons = document.querySelectorAll('.introduce-btn');
+        introduceButtons.forEach(button => {
+            button.addEventListener('click', async function () {
+                const replacementId = this.getAttribute('data-replacement-id');
+                await introduceReplacement(replacementId);
+                loadReplacementsByDate(dateFilter.value); // Перезагружаем данные
+            });
+        });
     }
+
 
     // Функция для удаления замены
     async function deleteReplacement(replacementId) {
@@ -212,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // Функция для удаления замены
+    // Функция для подтверждения замены
     async function confirmReplacement(replacementId) {
         try {
             const response = await fetch(`functions/confirm_replacement.php`, {
@@ -220,6 +255,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: JSON.stringify({'replacement_id': replacementId}),
             });
             if (!response.ok) throw new Error('Ошибка при удалении замены');
+            const result = await response.json();
+            alert(result.message);
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
+
+    // Функция для отметки замены внесенной
+    async function introduceReplacement(replacementId) {
+        try {
+            const response = await fetch(`functions/introduce_replacement.php`, {
+                method: 'POST',
+                body: JSON.stringify({'replacement_id': replacementId}),
+            });
+            if (!response.ok) throw new Error('Ошибка при отметке замены');
             const result = await response.json();
             alert(result.message);
         } catch (error) {
@@ -256,15 +306,20 @@ document.addEventListener('DOMContentLoaded', function () {
         
     });
 
-    // В начале загрузки страницы (после определения всех элементов)
+    let isDropdownOpen = false;
+
+    // Обновляем переменную при клике
+    document.addEventListener('click', function(e) {
+        isDropdownOpen = !!document.querySelector('.dropdown-actions-menu.show');
+    });
+
     setInterval(() => {
-        const selectedDate = dateFilter.value;
-        if (selectedDate) {
-            loadReplacementsByDate(selectedDate);
+        // Рендерим, если меню закрыто
+        if (!isDropdownOpen) { 
+            const selectedDate = dateFilter.value;
+            if (selectedDate) loadReplacementsByDate(selectedDate);
         }
     }, 3000);
-
-
 
     const today = new Date();
     const tomorrow = new Date(today);
@@ -290,4 +345,5 @@ document.addEventListener('DOMContentLoaded', function () {
         checkbox.addEventListener('change', applyFilters);
     });
     confirmedFilter.addEventListener('change', applyFilters);
+    introducedFilter.addEventListener('change', applyFilters);
 });

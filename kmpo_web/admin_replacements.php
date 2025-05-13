@@ -16,13 +16,21 @@
                 </div>
             </div>
 
+            <div class="dropdown-select">
+                <select id="introducedFilter">
+                    <option value="all">Внесена (все)</option>
+                    <option value="Да">Внесенные</option>
+                    <option value="Нет">Не внесенные</option>
+                </select>
+            </div>
+
             <input type="text" id="groupFilter" placeholder="Группа (например: 201-СА-23)">
         </div>
 
         <div class="filters">
             <div class="dropdown-select">
                 <select id="confirmedFilter">
-                    <option value="all">Все</option>
+                    <option value="all">Согласованность (все)</option>
                     <option value="Да">Согласована</option>
                     <option value="Нет">Не согласована</option>
                 </select>
@@ -47,7 +55,7 @@
         <table>
             <thead>
                 <tr>
-                    <th colspan="6" class="left">Общ. сведения</th>
+                    <th colspan="7" class="left">Общ. сведения</th>
                     <th colspan="4" class="was-header">Было</th>
                     <th colspan="4" class="became-header right">Стало</th>
                     <th class="hidden_tab"></th>
@@ -55,6 +63,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Дата</th>
+                    <th>Внесена</th>
                     <th>Группа</th>
                     <th>Тип замены</th>
                     <th>Причина</th>

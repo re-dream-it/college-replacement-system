@@ -65,12 +65,13 @@ class WebDatabase extends DataBase
         return $data;
     }
 
-    // Получение списка замен
+    // Получение списка замен для админ панели
     public function getReplacesAdmin($date){
         $statement = $this->pdo->prepare("SELECT 
             -- Основные сведения
             r.id AS replacement_id,
             r.date,
+            r.is_introduced,
             CONCAT(g.name, ' ', r.group_part) AS group_name,
             r.reason AS reason,
             r.confirmed AS confirmed,
@@ -650,6 +651,20 @@ class WebDatabase extends DataBase
     // Утверждение замены
     public function confirmReplacement($replacement_id) {
         $statement = $this->pdo->prepare("UPDATE replacements SET confirmed = 1 WHERE id = :replace_id;");
+        $statement->execute(['replace_id' => $replacement_id]);
+        return true;
+    }
+
+    // Отмека замены "Внесенной"
+    public function introduceReplacement($replacement_id) {
+        $statement = $this->pdo->prepare("UPDATE replacements SET is_introduced = 1 WHERE id = :replace_id;");
+        $statement->execute(['replace_id' => $replacement_id]);
+        return true;
+    }
+
+    // Отмека замены "Измененной"
+    public function setReplacementChanged($replacement_id) {
+        $statement = $this->pdo->prepare("UPDATE replacements SET is_introduced = 2 WHERE id = :replace_id;");
         $statement->execute(['replace_id' => $replacement_id]);
         return true;
     }

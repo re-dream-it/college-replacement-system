@@ -26,6 +26,8 @@ if (!($newFilled || $newEmpty)){
 }
 
 $replacement = $DB->editReplacement($replace, $oldEmpty, $newEmpty, $replace['id']);
+$DB->setReplacementChanged($replace['id']);
+
 $replacement_id = $replacement['id'];
 
 
