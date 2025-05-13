@@ -176,13 +176,11 @@ document.addEventListener('DOMContentLoaded', function () {
             tbody.appendChild(row);
         });
 
-        // Добавляем обработчики для кнопок удаления и подтверждения
-        addDeleteHandlers();
-        addConfirmHandlers();
+        addDropdownHandlers();
     }
 
     // Функция для добавления обработчиков удаления
-    function addDeleteHandlers() {
+    function addDropdownHandlers() {
         const deleteButtons = document.querySelectorAll('.delete-btn');
         deleteButtons.forEach(button => {
             button.addEventListener('click', async function () {
@@ -193,10 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         });
-    }
 
-    // Функция для добавления обработчика утверждения
-    function addConfirmHandlers() {
         const confirmButtons = document.querySelectorAll('.confirm-btn');
         confirmButtons.forEach(button => {
             button.addEventListener('click', async function () {
@@ -207,7 +202,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         });
+
+        const introduceButtons = document.querySelectorAll('.introduce-btn');
+        introduceButtons.forEach(button => {
+            button.addEventListener('click', async function () {
+                const replacementId = this.getAttribute('data-replacement-id');
+                await introduceReplacement(replacementId);
+                loadReplacementsByDate(dateFilter.value); // Перезагружаем данные
+            });
+        });
     }
+
 
     // Функция для удаления замены
     async function deleteReplacement(replacementId) {
@@ -231,6 +236,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 body: JSON.stringify({'replacement_id': replacementId}),
             });
             if (!response.ok) throw new Error('Ошибка при удалении замены');
+            const result = await response.json();
+            alert(result.message);
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
+
+    // Функция для отметки замены внесенной
+    async function introduceReplacement(replacementId) {
+        try {
+            const response = await fetch(`functions/introduce_replacement.php`, {
+                method: 'POST',
+                body: JSON.stringify({'replacement_id': replacementId}),
+            });
+            if (!response.ok) throw new Error('Ошибка при отметке замены');
             const result = await response.json();
             alert(result.message);
         } catch (error) {
@@ -267,15 +287,20 @@ document.addEventListener('DOMContentLoaded', function () {
         
     });
 
-    // В начале загрузки страницы (после определения всех элементов)
+    let isDropdownOpen = false;
+
+    // Обновляем переменную при клике
+    document.addEventListener('click', function(e) {
+        isDropdownOpen = !!document.querySelector('.dropdown-actions-menu.show');
+    });
+
     setInterval(() => {
-        const selectedDate = dateFilter.value;
-        if (selectedDate) {
-            loadReplacementsByDate(selectedDate);
+        // Рендерим, если меню закрыто
+        if (!isDropdownOpen) { 
+            const selectedDate = dateFilter.value;
+            if (selectedDate) loadReplacementsByDate(selectedDate);
         }
     }, 3000);
-
-
 
     const today = new Date();
     const tomorrow = new Date(today);
