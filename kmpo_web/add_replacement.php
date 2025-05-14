@@ -81,13 +81,12 @@
                         <label for="newRoom">Кабинет:</label>
                         <input autocomplete="off" type="text" id="newRoom" name="newRoom" placeholder="Например: 412">
                     </div>
+
+                    <div class="form-group-cb">
+                        <label><input class="cb" type="checkbox" id="confirmed" name="type" value="confirmed"> Согласовано</label>
+                    </div>
                 </div>
             </div>
-
-            <div class="form-group-cb">
-                <label><input class="cb" type="checkbox" id="confirmed" name="type" value="confirmed"> Согласовано</label>
-            </div>
-
 
             <div class="form-group">
                 <button type="submit" class="submit-btn">Добавить замену</button>
