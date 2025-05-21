@@ -4,7 +4,7 @@ document.getElementById('exportExcel').addEventListener('click', function() {
     
     // Строка группировки колонок
     const groupHeaders = [
-        'Общие сведения', '', '', '', '', '',
+        'Общие сведения', '', '', '', '', '', '', 
         'Было', '', '', '',
         'Стало', '', '', ''
     ];
@@ -39,6 +39,7 @@ document.getElementById('exportExcel').addEventListener('click', function() {
         { wch: 5 },   // ID 
         { wch: 13 },  // Дата
         { wch: 15 },  // Группа
+        { wch: 15 },  // Внесена
         { wch: 20 },  // Тип
         { wch: 10 },  // Причина
         { wch: 8 },   // Согл
@@ -54,9 +55,9 @@ document.getElementById('exportExcel').addEventListener('click', function() {
     
     // Объединение ячеек
     ws['!merges'] = [
-        { s: { r: 0, c: 0 }, e: { r: 0, c: 5 } }, // Общие сведения
-        { s: { r: 0, c: 6 }, e: { r: 0, c: 9 } }, // Было
-        { s: { r: 0, c: 10 }, e: { r: 0, c: 13 } } // Стало
+        { s: { r: 0, c: 0 }, e: { r: 0, c: 6 } }, // Общие сведения
+        { s: { r: 0, c: 7 }, e: { r: 0, c: 10 } }, // Было
+        { s: { r: 0, c: 11 }, e: { r: 0, c: 14 } } // Стало
     ];
     
     // Стили для заголовков
@@ -105,9 +106,9 @@ document.getElementById('exportExcel').addEventListener('click', function() {
             const cellAddress = XLSX.utils.encode_cell({ r, c });
             ws[cellAddress] = ws[cellAddress] || { t: 's', v: data[r][c] || '' };
             
-            if (c < 6) { // Общие сведения
+            if (c < 7) { // Общие сведения
                 ws[cellAddress].s = { ...grayStyle, ...centerStyle };
-            } else if (c < 10) { // Было
+            } else if (c < 11) { // Было
                 ws[cellAddress].s = { ...redHeaderStyle, ...centerStyle };
             } else { // Стало
                 ws[cellAddress].s = { ...greenHeaderStyle, ...centerStyle };
@@ -125,9 +126,9 @@ document.getElementById('exportExcel').addEventListener('click', function() {
             let cellStyle = {};
             
             // Определяем цвет фона
-            if (c < 6) { // Общие сведения
+            if (c < 7) { // Общие сведения
                 cellStyle = r % 2 === 0 ? grayDataStyle1 : grayDataStyle2;
-            } else if (c < 10) { // Было
+            } else if (c < 11) { // Было
                 cellStyle = r % 2 === 0 ? redDataStyle1 : redDataStyle2;
             } else { // Стало
                 cellStyle = r % 2 === 0 ? greenDataStyle1 : greenDataStyle2;
